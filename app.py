@@ -13,6 +13,7 @@ st.set_page_config(page_title="CloudGenie", page_icon="☁️", layout="wide")
 
 st.markdown("""
 <style>
+
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
 
 html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
@@ -495,13 +496,6 @@ File content:
 # --- FinOps Optimizer ---
 elif page == "FinOps Optimizer":
     st.markdown("<div class='hero'><h1>FinOps Optimizer</h1><p>Analyze cloud billing to find savings opportunities.</p></div>", unsafe_allow_html=True)
-    st.markdown("""
-    <div class="card-grid">
-        <div class="card"><div class="label">Idle EC2 Instance</div><div class="value glow">$120/mo</div></div>
-        <div class="card"><div class="label">Oversized Database</div><div class="value glow">$90/mo</div></div>
-        <div class="card"><div class="label">Total Potential Savings</div><div class="value glow">$210/mo</div></div>
-    </div>
-    """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.subheader("6-Month Cost Trend")
@@ -519,3 +513,52 @@ elif page == "FinOps Optimizer":
     total_saved = monthly_cost[0] - monthly_cost[-1]
     pct_saved = round((total_saved / monthly_cost[0]) * 100, 1)
     st.success(f"📉 Spend down **{pct_saved}%** since April — roughly **${total_saved}/month** saved through ongoing optimization.")
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.subheader("AI Cost Optimization Recommendations")
+
+    mock_billing_data = """
+Monthly Cloud Billing Summary (September):
+- EC2 instance web-prod-02: running 24/7 at m5.xlarge, average CPU utilization 8%
+- RDS database db-main: db.r5.2xlarge, average connections 12, storage 500GB (200GB used)
+- S3 bucket 'old-backups-2023': 800GB, no access in 90+ days, no lifecycle policy
+- Elastic IP allocated but unattached: 3 addresses
+- EBS volumes: 5 unattached volumes totaling 200GB
+Total monthly spend: $1,020
+"""
+
+    if st.button("💡 Get AI Recommendations"):
+        with st.spinner("Analyzing billing data for cost savings..."):
+            prompt = f"""You are a FinOps cost optimization specialist. Analyze this mock cloud billing data and identify specific cost-saving opportunities.
+
+Return ONLY a valid JSON array (no markdown, no extra text) where each item has this exact structure:
+{{"title": "short title", "description": "1-2 sentence explanation of the issue and fix", "estimated_savings": "$XX/month"}}
+
+Billing data:
+{mock_billing_data}
+"""
+            try:
+                response = model.generate_content(prompt)
+                raw_text = response.text.strip()
+                raw_text = raw_text.replace("```json", "").replace("```", "").strip()
+                recommendations = json.loads(raw_text)
+            except Exception as e:
+                recommendations = None
+                st.error("Couldn't parse AI response. Raw output shown below.")
+                st.code(response.text if 'response' in dir() else str(e))
+
+        if recommendations is not None:
+            if len(recommendations) == 0:
+                st.info("No additional optimization opportunities found.")
+            else:
+                cards_html = '<div class="card-grid">'
+                for rec in recommendations:
+                    cards_html += f"""
+<div class="card">
+<div class="label">{rec.get('title','')}</div>
+<div class="value glow" style="font-size:22px;">{rec.get('estimated_savings','')}</div>
+<div style="color:#9FB3CC; margin-top:8px; font-size:14px;">{rec.get('description','')}</div>
+</div>
+"""
+                cards_html += '</div>'
+                st.markdown(cards_html, unsafe_allow_html=True)
