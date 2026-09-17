@@ -1,3 +1,5 @@
+import random
+import datetime
 import streamlit as st
 import pandas as pd
 
@@ -161,6 +163,7 @@ if "page" not in st.session_state:
 nav_items = [
     ("About Me", "👤"),
     ("Dashboard", "📊"),
+    ("Monitoring", "📈"),
     ("SecOps Auditor", "🛡️"),
     ("FinOps Optimizer", "💰"),
 ]
@@ -206,6 +209,45 @@ elif page == "Dashboard":
         <div class="card"><div class="label">Monthly Savings Found</div><div class="value glow">$340</div></div>
     </div>
     """, unsafe_allow_html=True)
+
+# --- Monitoring ---
+elif page == "Monitoring":
+    st.markdown("<div class='hero'><h1>Monitoring</h1><p>Live system health metrics (simulated).</p></div>", unsafe_allow_html=True)
+
+    if "metrics_history" not in st.session_state:
+        st.session_state.metrics_history = pd.DataFrame({
+            "Time": [], "CPU (%)": [], "Memory (%)": [], "Network (Mbps)": []
+        })
+
+    if st.button("🔄 Refresh Metrics"):
+        new_row = pd.DataFrame({
+            "Time": [datetime.datetime.now().strftime("%H:%M:%S")],
+            "CPU (%)": [random.randint(20, 95)],
+            "Memory (%)": [random.randint(30, 90)],
+            "Network (Mbps)": [random.randint(10, 500)],
+        })
+        st.session_state.metrics_history = pd.concat(
+            [st.session_state.metrics_history, new_row], ignore_index=True
+        ).tail(20)
+
+    if len(st.session_state.metrics_history) == 0:
+        st.info("Click 'Refresh Metrics' to start monitoring.")
+    else:
+        latest = st.session_state.metrics_history.iloc[-1]
+        st.markdown(f"""
+        <div class="card-grid">
+            <div class="card"><div class="label">CPU Usage</div><div class="value glow">{latest['CPU (%)']}%</div></div>
+            <div class="card"><div class="label">Memory Usage</div><div class="value glow">{latest['Memory (%)']}%</div></div>
+            <div class="card"><div class="label">Network Throughput</div><div class="value glow">{latest['Network (Mbps)']} Mbps</div></div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        chart_df = st.session_state.metrics_history.set_index("Time")
+        st.line_chart(chart_df)
+
+        if latest["CPU (%)"] > 85:
+            st.warning("⚠️ High CPU usage detected — potential scaling event.")
 
 # --- SecOps Auditor ---
 elif page == "SecOps Auditor":
