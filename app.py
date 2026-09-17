@@ -190,6 +190,7 @@ nav_items = [
     ("Monitoring", "📈"),
     ("Incidents", "🚨"),
     ("Status", "✅"),
+    ("Architecture", "🧩"),
     ("SecOps Auditor", "🛡️"),
     ("FinOps Optimizer", "💰"),
 ]
@@ -220,11 +221,26 @@ if page == "About Me":
     st.markdown("""
     <div class="hero">
         <h1>Hi, I'm Carlito 👋</h1>
-        <p>BSIT student building toward a Cloud Engineering/Architecture career. CloudGenie is my hands-on portfolio project combining SecOps and FinOps AI tools, built with Python + Streamlit.</p>
+        <p>3rd-year BSIT student building toward a Cloud Engineering career. CloudGenie is my hands-on portfolio project — a simulated cloud operations platform combining security auditing, cost optimization, monitoring, and incident response into one working app.</p>
     </div>
     """, unsafe_allow_html=True)
+
     st.markdown("**Skills I'm building:** Cloud fundamentals · Python · AWS basics · Security auditing · Cost optimization")
-    st.info("This app is currently running on demo/mock data. Real Claude AI integration coming soon.")
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.subheader("What this project demonstrates")
+    st.markdown("""
+    <div class="card-grid">
+        <div class="card"><div class="label">🛡️ SecOps Auditor</div><div style="color:#9FB3CC; margin-top:8px;">Scans uploaded files for security risks and suggests fixes.</div></div>
+        <div class="card"><div class="label">💰 FinOps Optimizer</div><div style="color:#9FB3CC; margin-top:8px;">Analyzes cloud billing trends to find cost savings.</div></div>
+        <div class="card"><div class="label">📈 Monitoring & Status</div><div style="color:#9FB3CC; margin-top:8px;">Live system health metrics with auto-logged incidents.</div></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("Built end-to-end: coded in Python, version-controlled with Git/GitHub, and deployed live on Streamlit Community Cloud — a full working deployment pipeline, not just a design mockup.")
+
+    st.info("This app is currently running on simulated/mock data. Real Claude AI integration is the next milestone.")
 
 # --- Dashboard ---
 elif page == "Dashboard":
@@ -368,6 +384,58 @@ elif page == "Status":
             </div>
             """, unsafe_allow_html=True)
 
+# --- Architecture ---
+elif page == "Architecture":
+    st.markdown("<div class='hero'><h1>Architecture</h1><p>How CloudGenie's fictional system is structured.</p></div>", unsafe_allow_html=True)
+
+    svg_code = """<div class="card" style="padding:30px;">
+<svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto;">
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+<path d="M0,0 L0,6 L9,3 z" fill="#38E1FF"/>
+</marker>
+<filter id="glow">
+<feGaussianBlur stdDeviation="3" result="blur"/>
+<feMerge>
+<feMergeNode in="blur"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+<line x1="450" y1="90" x2="450" y2="150" stroke="#38E1FF" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="450" y1="210" x2="250" y2="280" stroke="#38E1FF" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="450" y1="210" x2="650" y2="280" stroke="#38E1FF" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="250" y1="340" x2="440" y2="410" stroke="#38E1FF" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="650" y1="340" x2="460" y2="410" stroke="#38E1FF" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="360" y="30" width="180" height="60" rx="12" fill="#111A2E" stroke="#38E1FF" stroke-width="1.5" filter="url(#glow)"/>
+<text x="450" y="65" fill="#E6F1FF" font-size="16" font-family="sans-serif" text-anchor="middle" font-weight="700">Users / CDN</text>
+<rect x="360" y="150" width="180" height="60" rx="12" fill="#111A2E" stroke="#38E1FF" stroke-width="1.5" filter="url(#glow)"/>
+<text x="450" y="185" fill="#E6F1FF" font-size="16" font-family="sans-serif" text-anchor="middle" font-weight="700">Load Balancer</text>
+<rect x="160" y="280" width="180" height="60" rx="12" fill="#111A2E" stroke="#38E1FF" stroke-width="1.5" filter="url(#glow)"/>
+<text x="250" y="315" fill="#E6F1FF" font-size="16" font-family="sans-serif" text-anchor="middle" font-weight="700">Web Server 1</text>
+<rect x="560" y="280" width="180" height="60" rx="12" fill="#111A2E" stroke="#38E1FF" stroke-width="1.5" filter="url(#glow)"/>
+<text x="650" y="315" fill="#E6F1FF" font-size="16" font-family="sans-serif" text-anchor="middle" font-weight="700">Web Server 2</text>
+<rect x="360" y="410" width="180" height="60" rx="12" fill="#111A2E" stroke="#38E1FF" stroke-width="1.5" filter="url(#glow)"/>
+<text x="450" y="445" fill="#E6F1FF" font-size="16" font-family="sans-serif" text-anchor="middle" font-weight="700">Database</text>
+</svg>
+</div>"""
+    st.markdown(svg_code, unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.markdown("**Users / CDN**")
+        st.caption("Entry point for traffic; caches static content close to users for speed.")
+    with col2:
+        st.markdown("**Load Balancer**")
+        st.caption("Distributes incoming requests evenly across available web servers.")
+    with col3:
+        st.markdown("**Web Servers**")
+        st.caption("Run the application logic; multiple instances allow redundancy and scaling.")
+    with col4:
+        st.markdown("**Database**")
+        st.caption("Stores and retrieves persistent application data.")
+
 # --- SecOps Auditor ---
 elif page == "SecOps Auditor":
     st.markdown("<div class='hero'><h1>SecOps Auditor</h1><p>Upload a config or log file to scan for vulnerabilities.</p></div>", unsafe_allow_html=True)
@@ -396,8 +464,19 @@ elif page == "FinOps Optimizer":
     </div>
     """, unsafe_allow_html=True)
 
-    chart_data = pd.DataFrame({
-        "Category": ["Idle EC2", "Oversized DB", "Other"],
-        "Savings ($)": [120, 90, 30]
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.subheader("6-Month Cost Trend")
+    st.caption("Monthly cloud spend before optimization recommendations were applied.")
+
+    months = ["Apr", "May", "Jun", "Jul", "Aug", "Sep"]
+    monthly_cost = [1450, 1580, 1390, 1240, 1180, 1020]
+
+    trend_df = pd.DataFrame({
+        "Month": months,
+        "Cloud Spend ($)": monthly_cost
     })
-    st.bar_chart(chart_data.set_index("Category"))
+    st.line_chart(trend_df.set_index("Month"))
+
+    total_saved = monthly_cost[0] - monthly_cost[-1]
+    pct_saved = round((total_saved / monthly_cost[0]) * 100, 1)
+    st.success(f"📉 Spend down **{pct_saved}%** since April — roughly **${total_saved}/month** saved through ongoing optimization.")
