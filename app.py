@@ -153,6 +153,30 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     border: 2px dashed rgba(56, 225, 255, 0.3);
     border-radius: 14px;
 }
+
+.incident-card {
+    background: #0F1830;
+    border-left: 4px solid;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeInUp 0.5s ease both;
+}
+.incident-open { border-color: #FF5C6C; }
+.incident-resolved { border-color: #38E1FF; opacity: 0.7; }
+.badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.badge-open { background: rgba(255,92,108,0.15); color: #FF5C6C; }
+.badge-resolved { background: rgba(56,225,255,0.15); color: #38E1FF; }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -164,6 +188,7 @@ nav_items = [
     ("About Me", "👤"),
     ("Dashboard", "📊"),
     ("Monitoring", "📈"),
+    ("Incidents", "🚨"),
     ("SecOps Auditor", "🛡️"),
     ("FinOps Optimizer", "💰"),
 ]
@@ -248,6 +273,49 @@ elif page == "Monitoring":
 
         if latest["CPU (%)"] > 85:
             st.warning("⚠️ High CPU usage detected — potential scaling event.")
+            if "incidents" not in st.session_state:
+                st.session_state.incidents = []
+            already_logged = any(
+                inc["time"] == latest["Time"] for inc in st.session_state.incidents
+            )
+            if not already_logged:
+                st.session_state.incidents.append({
+                    "time": latest["Time"],
+                    "description": f"High CPU usage detected ({latest['CPU (%)']}%)",
+                    "status": "Open"
+                })
+
+# --- Incidents ---
+elif page == "Incidents":
+    st.markdown("<div class='hero'><h1>Incident Timeline</h1><p>Auto-logged incidents from live monitoring.</p></div>", unsafe_allow_html=True)
+
+    if "incidents" not in st.session_state:
+        st.session_state.incidents = []
+
+    if len(st.session_state.incidents) == 0:
+        st.info("No incidents logged yet. Trigger high CPU usage on the Monitoring page to generate one.")
+    else:
+        for i, incident in enumerate(reversed(st.session_state.incidents)):
+            real_index = len(st.session_state.incidents) - 1 - i
+            status_class = "incident-open" if incident["status"] == "Open" else "incident-resolved"
+            badge_class = "badge-open" if incident["status"] == "Open" else "badge-resolved"
+
+            col1, col2 = st.columns([5, 1])
+            with col1:
+                st.markdown(f"""
+                <div class="incident-card {status_class}">
+                    <div>
+                        <b>{incident['description']}</b><br>
+                        <span style="color:#9FB3CC; font-size:13px;">{incident['time']}</span>
+                    </div>
+                    <span class="badge {badge_class}">{incident['status']}</span>
+                </div>
+                """, unsafe_allow_html=True)
+            with col2:
+                if incident["status"] == "Open":
+                    if st.button("Resolve", key=f"resolve_{real_index}"):
+                        st.session_state.incidents[real_index]["status"] = "Resolved"
+                        st.rerun()
 
 # --- SecOps Auditor ---
 elif page == "SecOps Auditor":
