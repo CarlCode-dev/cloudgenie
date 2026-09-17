@@ -189,6 +189,7 @@ nav_items = [
     ("Dashboard", "📊"),
     ("Monitoring", "📈"),
     ("Incidents", "🚨"),
+    ("Status", "✅"),
     ("SecOps Auditor", "🛡️"),
     ("FinOps Optimizer", "💰"),
 ]
@@ -316,6 +317,56 @@ elif page == "Incidents":
                     if st.button("Resolve", key=f"resolve_{real_index}"):
                         st.session_state.incidents[real_index]["status"] = "Resolved"
                         st.rerun()
+
+# --- Status ---
+elif page == "Status":
+    st.markdown("<div class='hero'><h1>System Status</h1><p>Live operational status overview.</p></div>", unsafe_allow_html=True)
+
+    open_incidents = [i for i in st.session_state.get("incidents", []) if i["status"] == "Open"]
+    overall_status = "🟠 Degraded Performance" if open_incidents else "🟢 All Systems Operational"
+
+    st.markdown(f"""
+    <div class="card-grid">
+        <div class="card" style="flex:2;">
+            <div class="label">Overall Status</div>
+            <div class="value glow">{overall_status}</div>
+        </div>
+        <div class="card">
+            <div class="label">Open Incidents</div>
+            <div class="value glow">{len(open_incidents)}</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.subheader("Components")
+
+    components = [
+        ("SecOps Auditor", "Operational"),
+        ("FinOps Optimizer", "Operational"),
+        ("Monitoring Engine", "Degraded" if open_incidents else "Operational"),
+        ("Incident Tracker", "Operational"),
+    ]
+    for name, status in components:
+        badge_class = "badge-resolved" if status == "Operational" else "badge-open"
+        dot = "🟢" if status == "Operational" else "🟠"
+        st.markdown(f"""
+        <div class="incident-card incident-resolved">
+            <div>{dot} <b>{name}</b></div>
+            <span class="badge {badge_class}">{status}</span>
+        </div>
+        """, unsafe_allow_html=True)
+
+    if open_incidents:
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.subheader("Active Incidents")
+        for inc in open_incidents:
+            st.markdown(f"""
+            <div class="incident-card incident-open">
+                <div><b>{inc['description']}</b><br><span style="color:#9FB3CC; font-size:13px;">{inc['time']}</span></div>
+                <span class="badge badge-open">Open</span>
+            </div>
+            """, unsafe_allow_html=True)
 
 # --- SecOps Auditor ---
 elif page == "SecOps Auditor":
