@@ -1,7 +1,13 @@
-import random
-import datetime
+import json
 import streamlit as st
 import pandas as pd
+import random
+import datetime
+import textwrap
+import google.generativeai as genai
+
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-3.6-flash")
 
 st.set_page_config(page_title="CloudGenie", page_icon="☁️", layout="wide")
 
@@ -226,7 +232,6 @@ if page == "About Me":
     """, unsafe_allow_html=True)
 
     st.markdown("**Skills I'm building:** Cloud fundamentals · Python · AWS basics · Security auditing · Cost optimization")
-
     st.markdown("<br>", unsafe_allow_html=True)
     st.subheader("What this project demonstrates")
     st.markdown("""
@@ -439,17 +444,51 @@ elif page == "Architecture":
 # --- SecOps Auditor ---
 elif page == "SecOps Auditor":
     st.markdown("<div class='hero'><h1>SecOps Auditor</h1><p>Upload a config or log file to scan for vulnerabilities.</p></div>", unsafe_allow_html=True)
-    uploaded_file = st.file_uploader("Upload a file (mock scan)", type=["txt", "json", "log"])
+    uploaded_file = st.file_uploader("Upload a file for AI security analysis", type=["txt", "json", "log"])
 
     if uploaded_file is not None:
         st.write(f"File received: **{uploaded_file.name}**")
-        st.markdown("""
-        <div class="risk-card risk-high">🔴 <b>HIGH RISK</b> — Open SSH port found (mock)<br><span style="color:#9FB3CC;">Port 22 open to 0.0.0.0/0. Restrict to specific IP ranges.</span></div>
-        <div class="risk-card risk-med">🟠 <b>MEDIUM RISK</b> — Outdated IAM policy (mock)<br><span style="color:#9FB3CC;">Policy grants broader permissions than needed. Apply least privilege.</span></div>
-        <div class="risk-card risk-low">🟢 <b>LOW RISK</b> — Unused security group (mock)<br><span style="color:#9FB3CC;">No attached resources. Remove if unused.</span></div>
-        """, unsafe_allow_html=True)
-        if st.button("🛠️ Fix with AI"):
-            st.code("resource \"aws_security_group_rule\" \"fix\" {\n  # Example Terraform fix (mock output)\n}", language="hcl")
+
+        file_content = uploaded_file.read().decode("utf-8", errors="ignore")
+
+        if st.button("🔍 Scan with AI"):
+            with st.spinner("Analyzing file for security risks..."):
+                prompt = f"""You are a cloud security auditor. Analyze the following file content for security vulnerabilities, misconfigurations, or risks.
+
+Return ONLY a valid JSON array (no markdown, no extra text) where each item has this exact structure:
+{{"risk": "High" or "Medium" or "Low", "title": "short title", "description": "1-2 sentence explanation and recommendation"}}
+
+If there are no notable risks, return an empty array: []
+
+File content:
+{file_content[:4000]}
+"""
+                try:
+                    response = model.generate_content(prompt)
+                    raw_text = response.text.strip()
+                    raw_text = raw_text.replace("```json", "").replace("```", "").strip()
+                    findings = json.loads(raw_text)
+                except Exception as e:
+                    findings = None
+                    st.error(f"Couldn't parse AI response. Raw output shown below.")
+                    st.code(response.text if 'response' in dir() else str(e))
+
+            if findings is not None:
+                if len(findings) == 0:
+                    st.success("✅ No significant risks detected in this file.")
+                else:
+                    risk_class_map = {"High": "risk-high", "Medium": "risk-med", "Low": "risk-low"}
+                    risk_emoji_map = {"High": "🔴", "Medium": "🟠", "Low": "🟢"}
+                    for finding in findings:
+                        risk = finding.get("risk", "Low")
+                        css_class = risk_class_map.get(risk, "risk-low")
+                        emoji = risk_emoji_map.get(risk, "🟢")
+                        st.markdown(f"""
+                        <div class="risk-card {css_class}">{emoji} <b>{risk.upper()} RISK</b> — {finding.get('title','')}<br><span style="color:#9FB3CC;">{finding.get('description','')}</span></div>
+                        """, unsafe_allow_html=True)
+
+                    if st.button("🛠️ Fix with AI"):
+                        st.code("resource \"aws_security_group_rule\" \"fix\" {\n  # Example Terraform fix (mock output)\n}", language="hcl")
     else:
         st.caption("No file uploaded yet.")
 
