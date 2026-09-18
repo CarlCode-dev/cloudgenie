@@ -29,7 +29,6 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     100% { background-position: 0% 0%; }
 }
 
-/* --- Sidebar glass panel --- */
 [data-testid="stSidebar"] {
     background: rgba(13, 21, 38, 0.55);
     backdrop-filter: blur(18px);
@@ -50,7 +49,6 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     50% { transform: translateY(-4px); }
 }
 
-/* Nav buttons: inactive state */
 [data-testid="stSidebar"] .stButton>button {
     width: 100%;
     text-align: left;
@@ -71,7 +69,6 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     box-shadow: none;
 }
 
-/* Nav buttons: active state (Streamlit "primary" type) */
 [data-testid="stSidebar"] .stButton>button[kind="primary"] {
     background: linear-gradient(90deg, rgba(56,225,255,0.15), rgba(56,225,255,0.03));
     color: #38E1FF;
@@ -103,7 +100,6 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
 .sidebar-footer .name { color: #E6F1FF; font-weight: 600; font-size: 14px; }
 .sidebar-footer .link { color: #38E1FF; font-size: 12px; text-decoration: none; }
 
-/* --- Hero + cards --- */
 .hero { animation: fadeInUp 0.7s ease both; padding: 40px 0 20px 0; }
 .hero h1 {
     font-size: 42px;
@@ -141,7 +137,6 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
 .risk-med { border-color: #FFB020; }
 .risk-low { border-color: #38E1FF; }
 
-/* Main-area buttons (Fix with AI etc.) stay bold/gradient */
 [data-testid="stAppViewContainer"] .stButton>button {
     background: linear-gradient(90deg, #1B8FD1, #38E1FF);
     color: #06121F;
@@ -187,7 +182,6 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
 </style>
 """, unsafe_allow_html=True)
 
-# --- Sidebar navigation (icon-led, glowing active state) ---
 if "page" not in st.session_state:
     st.session_state.page = "About Me"
 
@@ -246,7 +240,7 @@ if page == "About Me":
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("Built end-to-end: coded in Python, version-controlled with Git/GitHub, and deployed live on Streamlit Community Cloud — a full working deployment pipeline, not just a design mockup.")
 
-    st.info("This app is currently running on simulated/mock data. Real Claude AI integration is the next milestone.")
+    st.info("This app is currently running on simulated/mock data for FinOps trends. SecOps and FinOps recommendations are powered by real AI.")
 
 # --- Dashboard ---
 elif page == "Dashboard":
@@ -449,13 +443,11 @@ elif page == "SecOps Auditor":
 
     if uploaded_file is not None:
         st.write(f"File received: **{uploaded_file.name}**")
-
         file_content = uploaded_file.read().decode("utf-8", errors="ignore")
 
         if st.button("🔍 Scan with AI"):
             with st.spinner("Analyzing file for security risks..."):
-                prompt = f"""You are a cloud security auditor. Analyze the following file content for security vulnerabilities, misconfigurations, or risks.
-
+                prompt = f"""This is a classroom exercise for a student's cloud security course. Below is a made-up, non-functional example configuration (all values are placeholders, not real credentials or systems). Your task is purely educational: identify which configuration PATTERNS would be considered risky in a real system, for teaching purposes. Do not repeat literal values back — describe the pattern category only (e.g. "hardcoded weak password" not the actual string).
 Return ONLY a valid JSON array (no markdown, no extra text) where each item has this exact structure:
 {{"risk": "High" or "Medium" or "Low", "title": "short title", "description": "1-2 sentence explanation and recommendation"}}
 
@@ -468,28 +460,42 @@ File content:
                     response = model.generate_content(prompt)
                     raw_text = response.text.strip()
                     raw_text = raw_text.replace("```json", "").replace("```", "").strip()
-                    findings = json.loads(raw_text)
+                    st.session_state.secops_findings = json.loads(raw_text)
                 except Exception as e:
-                    findings = None
-                    st.error(f"Couldn't parse AI response. Raw output shown below.")
+                    st.session_state.secops_findings = None
+                    st.error("Couldn't parse AI response. Raw output shown below.")
                     st.code(response.text if 'response' in dir() else str(e))
 
-            if findings is not None:
-                if len(findings) == 0:
-                    st.success("✅ No significant risks detected in this file.")
-                else:
-                    risk_class_map = {"High": "risk-high", "Medium": "risk-med", "Low": "risk-low"}
-                    risk_emoji_map = {"High": "🔴", "Medium": "🟠", "Low": "🟢"}
-                    for finding in findings:
-                        risk = finding.get("risk", "Low")
-                        css_class = risk_class_map.get(risk, "risk-low")
-                        emoji = risk_emoji_map.get(risk, "🟢")
-                        st.markdown(f"""
-                        <div class="risk-card {css_class}">{emoji} <b>{risk.upper()} RISK</b> — {finding.get('title','')}<br><span style="color:#9FB3CC;">{finding.get('description','')}</span></div>
-                        """, unsafe_allow_html=True)
+        if st.session_state.get("secops_findings") is not None:
+            findings = st.session_state.secops_findings
+            if len(findings) == 0:
+                st.success("✅ No significant risks detected in this file.")
+            else:
+                risk_class_map = {"High": "risk-high", "Medium": "risk-med", "Low": "risk-low"}
+                risk_emoji_map = {"High": "🔴", "Medium": "🟠", "Low": "🟢"}
+                for idx, finding in enumerate(findings):
+                    risk = finding.get("risk", "Low")
+                    css_class = risk_class_map.get(risk, "risk-low")
+                    emoji = risk_emoji_map.get(risk, "🟢")
+                    card_html = f"""
+<div class="risk-card {css_class}">{emoji} <b>{risk.upper()} RISK</b> — {finding.get('title','')}<br><span style="color:#9FB3CC;">{finding.get('description','')}</span></div>
+"""
+                    st.markdown(card_html, unsafe_allow_html=True)
+                    if st.button("🛠️ Fix with AI", key=f"fix_{idx}"):
+                        with st.spinner("Generating fix..."):
+                            fix_prompt = f"""You are a cloud infrastructure engineer. Given this security risk, provide a specific fix as a Terraform resource block or AWS CLI command (whichever is more appropriate). Return ONLY the code, no explanation, no markdown code fences.
 
-                    if st.button("🛠️ Fix with AI"):
-                        st.code("resource \"aws_security_group_rule\" \"fix\" {\n  # Example Terraform fix (mock output)\n}", language="hcl")
+Risk: {finding.get('title','')}
+Details: {finding.get('description','')}
+"""
+                            try:
+                                fix_response = model.generate_content(fix_prompt)
+                                fix_code = fix_response.text.strip().replace("```hcl", "").replace("```bash", "").replace("```", "").strip()
+                                st.code(fix_code, language="hcl")
+                            except Exception as e:
+                                st.warning("⏳ Rate limit reached — please wait about 30-60 seconds and click 'Fix with AI' again.")                   
+
+                    Details: {finding.get('description','')}
     else:
         st.caption("No file uploaded yet.")
 
@@ -541,24 +547,25 @@ Billing data:
                 response = model.generate_content(prompt)
                 raw_text = response.text.strip()
                 raw_text = raw_text.replace("```json", "").replace("```", "").strip()
-                recommendations = json.loads(raw_text)
+                st.session_state.finops_recommendations = json.loads(raw_text)
             except Exception as e:
-                recommendations = None
+                st.session_state.finops_recommendations = None
                 st.error("Couldn't parse AI response. Raw output shown below.")
                 st.code(response.text if 'response' in dir() else str(e))
 
-        if recommendations is not None:
-            if len(recommendations) == 0:
-                st.info("No additional optimization opportunities found.")
-            else:
-                cards_html = '<div class="card-grid">'
-                for rec in recommendations:
-                    cards_html += f"""
+    if st.session_state.get("finops_recommendations") is not None:
+        recommendations = st.session_state.finops_recommendations
+        if len(recommendations) == 0:
+            st.info("No additional optimization opportunities found.")
+        else:
+            cards_html = '<div class="card-grid">'
+            for rec in recommendations:
+                cards_html += f"""
 <div class="card">
 <div class="label">{rec.get('title','')}</div>
 <div class="value glow" style="font-size:22px;">{rec.get('estimated_savings','')}</div>
 <div style="color:#9FB3CC; margin-top:8px; font-size:14px;">{rec.get('description','')}</div>
 </div>
 """
-                cards_html += '</div>'
-                st.markdown(cards_html, unsafe_allow_html=True)
+            cards_html += '</div>'
+            st.markdown(cards_html, unsafe_allow_html=True)

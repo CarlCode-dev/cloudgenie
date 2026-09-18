@@ -1,6 +1,6 @@
 Server: web-prod-01
 SSH Port: 22
 SSH Access: 0.0.0.0/0 (open to all)
-Admin Password: admin123
+Admin Password: [WEAK_PASSWORD_EXAMPLE]
 Database: publicly accessible, no encryption
 IAM Policy: AdministratorAccess granted to all users
