@@ -385,25 +385,29 @@ if page == "About Me":
     st.markdown("""
     <div class="hero">
         <h1>Hi, I'm Carlito 👋</h1>
-        <p>3rd-year BSIT student building toward a Cloud Engineering career. CloudGenie is my hands-on portfolio project — a simulated cloud operations platform combining security auditing, cost optimization, monitoring, and incident response into one working app.</p>
+        <p>3rd-year BSIT student building toward a Cloud Engineering career. CloudGenie is my hands-on portfolio project — a working cloud operations platform with real AI integration, combining security auditing, cost optimization, live monitoring, incident response, and an AI assistant into one deployed app.</p>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("**Skills I'm building:** Cloud fundamentals · Python · AWS basics · Security auditing · Cost optimization")
+
     st.markdown("<br>", unsafe_allow_html=True)
     st.subheader("What this project demonstrates")
     st.markdown("""
     <div class="card-grid">
-        <div class="card"><div class="label">🛡️ SecOps Auditor</div><div style="color:#9FB3CC; margin-top:8px;">Scans uploaded files for security risks and suggests fixes.</div></div>
-        <div class="card"><div class="label">💰 FinOps Optimizer</div><div style="color:#9FB3CC; margin-top:8px;">Analyzes cloud billing trends to find cost savings.</div></div>
-        <div class="card"><div class="label">📈 Monitoring & Status</div><div style="color:#9FB3CC; margin-top:8px;">Live system health metrics with auto-logged incidents.</div></div>
+        <div class="card"><div class="label">🛡️ SecOps Auditor</div><div style="color:#9FB3CC; margin-top:8px;">Real AI analysis of uploaded files for security risks, with AI-generated fixes.</div></div>
+        <div class="card"><div class="label">💰 FinOps Optimizer</div><div style="color:#9FB3CC; margin-top:8px;">Real AI-generated cost-saving recommendations from cloud billing data.</div></div>
+        <div class="card"><div class="label">💬 Ask CloudGenie</div><div style="color:#9FB3CC; margin-top:8px;">A built-in AI assistant for cloud and DevOps questions, available on every page.</div></div>
+        <div class="card"><div class="label">📖 Runbook Generator</div><div style="color:#9FB3CC; margin-top:8px;">AI-generated incident response runbooks for common outage scenarios.</div></div>
+        <div class="card"><div class="label">📈 Monitoring & Status</div><div style="color:#9FB3CC; margin-top:8px;">Live system health metrics with auto-logged incidents and a public status page.</div></div>
+        <div class="card"><div class="label">🧩 Architecture</div><div style="color:#9FB3CC; margin-top:8px;">Visual system architecture diagram and cost trend analysis over time.</div></div>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("Built end-to-end: coded in Python, version-controlled with Git/GitHub, and deployed live on Streamlit Community Cloud — a full working deployment pipeline, not just a design mockup.")
+    st.markdown("Built end-to-end: coded in Python, integrated with Google's Gemini API for real AI analysis, version-controlled with Git/GitHub, and deployed live on Streamlit Community Cloud — a full working deployment pipeline, not just a design mockup.")
 
-    st.info("This app is currently running on simulated/mock data for FinOps trends. SecOps and FinOps recommendations are powered by real AI.")
+    st.info("All AI-powered features (SecOps, FinOps, Ask CloudGenie, Runbooks) use real, live Gemini API responses. Some supporting data — like the 6-month billing history and live system metrics — is simulated by design, since this app isn't connected to a real cloud environment.")
 
 # --- Dashboard ---
 elif page == "Dashboard":
