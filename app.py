@@ -395,14 +395,19 @@ if page == "About Me":
     st.subheader("What this project demonstrates")
     st.markdown("""
     <div class="card-grid">
+        <div class="card"><div class="label">📊 Dashboard</div><div style="color:#9FB3CC; margin-top:8px;">At-a-glance overview of overall security score and savings found.</div></div>
+        <div class="card"><div class="label">📈 Monitoring</div><div style="color:#9FB3CC; margin-top:8px;">Live simulated system health metrics — CPU, memory, and network throughput.</div></div>
+        <div class="card"><div class="label">🚨 Incidents</div><div style="color:#9FB3CC; margin-top:8px;">Auto-logged incident timeline triggered by monitoring thresholds.</div></div>
+        <div class="card"><div class="label">✅ Status</div><div style="color:#9FB3CC; margin-top:8px;">Public-facing system status page reflecting live incident state.</div></div>
+        <div class="card"><div class="label">🧩 Architecture</div><div style="color:#9FB3CC; margin-top:8px;">Visual system architecture diagram showing how the platform is structured.</div></div>
         <div class="card"><div class="label">🛡️ SecOps Auditor</div><div style="color:#9FB3CC; margin-top:8px;">Real AI analysis of uploaded files for security risks, with AI-generated fixes.</div></div>
-        <div class="card"><div class="label">💰 FinOps Optimizer</div><div style="color:#9FB3CC; margin-top:8px;">Real AI-generated cost-saving recommendations from cloud billing data.</div></div>
-        <div class="card"><div class="label">💬 Ask CloudGenie</div><div style="color:#9FB3CC; margin-top:8px;">A built-in AI assistant for cloud and DevOps questions, available on every page.</div></div>
-        <div class="card"><div class="label">📖 Runbook Generator</div><div style="color:#9FB3CC; margin-top:8px;">AI-generated incident response runbooks for common outage scenarios.</div></div>
-        <div class="card"><div class="label">📈 Monitoring & Status</div><div style="color:#9FB3CC; margin-top:8px;">Live system health metrics with auto-logged incidents and a public status page.</div></div>
-        <div class="card"><div class="label">🧩 Architecture</div><div style="color:#9FB3CC; margin-top:8px;">Visual system architecture diagram and cost trend analysis over time.</div></div>
+        <div class="card"><div class="label">💰 FinOps Optimizer</div><div style="color:#9FB3CC; margin-top:8px;">Real AI-generated cost-saving recommendations, with a 6-month cost trend chart.</div></div>
+        <div class="card"><div class="label">📖 Runbooks</div><div style="color:#9FB3CC; margin-top:8px;">AI-generated incident response runbooks for common outage scenarios.</div></div>
     </div>
     """, unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.caption("💬 Also available on every page: **Ask CloudGenie**, a floating AI assistant for cloud and DevOps questions.")
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("Built end-to-end: coded in Python, integrated with Google's Gemini API for real AI analysis, version-controlled with Git/GitHub, and deployed live on Streamlit Community Cloud — a full working deployment pipeline, not just a design mockup.")
