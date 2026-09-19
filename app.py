@@ -179,6 +179,58 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
 .badge-open { background: rgba(255,92,108,0.15); color: #FF5C6C; }
 .badge-resolved { background: rgba(56,225,255,0.15); color: #38E1FF; }
 
+.st-key-floating_chat_btn {
+    position: fixed;
+    bottom: 54px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: fit-content;
+}
+.st-key-floating_chat_btn button {
+    background: linear-gradient(90deg, #B14EFF, #FF6EC7) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 14px 28px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 20px rgba(177,78,255,0.4), 0 0 20px rgba(255,110,199,0.3) !important;
+    transition: all 0.25s ease !important;
+}
+.st-key-floating_chat_btn button:hover {
+    box-shadow: 0 0 30px rgba(177,78,255,0.6), 0 0 30px rgba(255,110,199,0.5) !important;
+    transform: translateY(-2px);
+}
+
+.chat-bubble-user {
+    background: linear-gradient(90deg, #1B8FD1, #38E1FF);
+    color: #06121F;
+    border-radius: 16px 16px 4px 16px;
+    padding: 12px 18px;
+    margin: 8px 0;
+    max-width: 75%;
+    margin-left: auto;
+    font-weight: 500;
+    animation: fadeInUp 0.4s ease both;
+}
+.chat-bubble-ai {
+    background: linear-gradient(90deg, #B14EFF, #FF6EC7);
+    color: white;
+    border-radius: 16px 16px 16px 4px;
+    padding: 12px 18px;
+    margin: 8px 0;
+    max-width: 75%;
+    animation: fadeInUp 0.4s ease both;
+}
+.chat-container { display: flex; flex-direction: column; }
+.chat-panel {
+    border: 1px solid rgba(177,78,255,0.3);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 24px;
+    background: rgba(20,10,35,0.4);
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -194,6 +246,7 @@ nav_items = [
     ("Architecture", "🧩"),
     ("SecOps Auditor", "🛡️"),
     ("FinOps Optimizer", "💰"),
+    ("Runbooks", "📖"),
 ]
 
 st.sidebar.markdown("<div class='sidebar-logo'>☁️ <span>CloudGenie</span></div>", unsafe_allow_html=True)
@@ -216,6 +269,116 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 
 page = st.session_state.page
+
+if "show_chat" not in st.session_state:
+    st.session_state.show_chat = False
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+if st.session_state.show_chat:
+    st.markdown('<div class="chat-panel">', unsafe_allow_html=True)
+    st.subheader("💬 Ask CloudGenie")
+
+    chat_html = '<div class="chat-container">'
+    for msg in st.session_state.chat_history:
+        css_class = "chat-bubble-user" if msg["role"] == "user" else "chat-bubble-ai"
+        chat_html += f'<div class="{css_class}">{msg["content"]}</div>'
+    chat_html += '</div>'
+    st.markdown(chat_html, unsafe_allow_html=True)
+
+    with st.form(key="chat_form", clear_on_submit=True):
+        user_question = st.text_input("Type your question...", label_visibility="collapsed")
+        col_a, col_b = st.columns([1, 1])
+        with col_a:
+            submitted = st.form_submit_button("Send")
+        with col_b:
+            closed = st.form_submit_button("Close Chat")
+
+    if submitted and user_question.strip():
+        st.session_state.chat_history.append({"role": "user", "content": user_question})
+        with st.spinner("Thinking..."):
+            chat_prompt = f"""You are CloudGenie, a friendly AI assistant specialized in cloud engineering, DevOps, security operations, and cost optimization. Answer clearly and concisely (2-4 sentences unless more detail is genuinely needed). If the question is unrelated to cloud/DevOps/tech topics, politely redirect the user back to cloud-related topics instead of answering.
+
+User question: {user_question}
+"""
+            try:
+                response = model.generate_content(chat_prompt)
+                answer = response.text.strip()
+            except Exception as e:
+                answer = "⏳ Rate limit reached — please wait about 30-60 seconds and try again."
+        st.session_state.chat_history.append({"role": "ai", "content": answer})
+        st.rerun()
+
+    if closed:
+        st.session_state.show_chat = False
+        st.rerun()
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# --- Runbooks ---
+elif page == "Runbooks":
+    st.markdown("<div class='hero'><h1>Runbook Generator</h1><p>AI-generated incident response runbooks.</p></div>", unsafe_allow_html=True)
+
+    common_incidents = [
+        "Database connection timeout",
+        "High memory usage",
+        "Failed deployment rollback",
+        "SSL certificate expiration",
+        "API rate limit exceeded",
+        "Disk space exhaustion",
+        "Custom (type your own)"
+    ]
+
+    selected = st.selectbox("Select an incident type", common_incidents)
+
+    if selected == "Custom (type your own)":
+        incident_type = st.text_input("Describe the incident type")
+    else:
+        incident_type = selected
+
+    if st.button("📖 Generate Runbook") and incident_type.strip():
+        with st.spinner("Generating runbook..."):
+            runbook_prompt = f"""You are a senior SRE creating an incident response runbook for a team's internal documentation. Create a structured runbook for this incident type: "{incident_type}"
+
+Return ONLY a valid JSON object with this exact structure (no markdown, no extra text):
+{{
+  "title": "runbook title",
+  "severity": "High/Medium/Low",
+  "detection": "how this incident is typically detected",
+  "steps": ["step 1", "step 2", "step 3", "..."],
+  "prevention": "brief note on preventing recurrence"
+}}
+"""
+            try:
+                response = model.generate_content(runbook_prompt)
+                raw_text = response.text.strip().replace("```json", "").replace("```", "").strip()
+                st.session_state.runbook_data = json.loads(raw_text)
+            except Exception as e:
+                st.session_state.runbook_data = None
+                st.warning("⏳ Rate limit reached or couldn't parse response — please wait 30-60 seconds and try again.")
+
+    if st.session_state.get("runbook_data") is not None:
+        rb = st.session_state.runbook_data
+        severity_color = {"High": "risk-high", "Medium": "risk-med", "Low": "risk-low"}.get(rb.get("severity", "Medium"), "risk-med")
+
+        steps_html = "".join([f"<li style='margin-bottom:8px;'>{step}</li>" for step in rb.get("steps", [])])
+
+        runbook_html = f"""
+<div class="risk-card {severity_color}" style="padding:24px;">
+<h3 style="margin-top:0; color:#E6F1FF;">{rb.get('title','')}</h3>
+<p><b>Severity:</b> {rb.get('severity','')}</p>
+<p><b>Detection:</b> {rb.get('detection','')}</p>
+<p><b>Response Steps:</b></p>
+<ol style="color:#9FB3CC;">{steps_html}</ol>
+<p><b>Prevention:</b> <span style="color:#9FB3CC;">{rb.get('prevention','')}</span></p>
+</div>
+"""
+        st.markdown(runbook_html, unsafe_allow_html=True)
+
+with st.container(key="floating_chat_btn"):
+    if st.button("💬 Ask CloudGenie"):
+        st.session_state.show_chat = not st.session_state.show_chat
+        st.rerun()
 
 # --- About Me ---
 if page == "About Me":
