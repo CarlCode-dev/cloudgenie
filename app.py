@@ -277,7 +277,15 @@ if "chat_history" not in st.session_state:
 
 if st.session_state.show_chat:
     st.markdown('<div class="chat-panel">', unsafe_allow_html=True)
-    st.subheader("💬 Ask CloudGenie")
+
+    header_col1, header_col2 = st.columns([5, 1])
+    with header_col1:
+        st.subheader("💬 Ask CloudGenie")
+    with header_col2:
+        closed = st.button("✕ Close", key="close_chat_btn")
+
+    if len(st.session_state.chat_history) == 0:
+        st.info("👋 I'm specialized in cloud engineering, DevOps, security, and cost optimization topics only. Ask me about AWS, Azure, GCP, Kubernetes, CI/CD, or cloud cost management — I'll politely decline anything unrelated.")
 
     chat_html = '<div class="chat-container">'
     for msg in st.session_state.chat_history:
@@ -287,12 +295,11 @@ if st.session_state.show_chat:
     st.markdown(chat_html, unsafe_allow_html=True)
 
     with st.form(key="chat_form", clear_on_submit=True):
-        user_question = st.text_input("Type your question...", label_visibility="collapsed")
-        col_a, col_b = st.columns([1, 1])
-        with col_a:
+        col_input, col_send = st.columns([6, 1])
+        with col_input:
+            user_question = st.text_input("Type your question...", label_visibility="collapsed")
+        with col_send:
             submitted = st.form_submit_button("Send")
-        with col_b:
-            closed = st.form_submit_button("Close Chat")
 
     if submitted and user_question.strip():
         st.session_state.chat_history.append({"role": "user", "content": user_question})
