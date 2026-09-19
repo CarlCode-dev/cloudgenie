@@ -220,6 +220,8 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     padding: 12px 18px;
     margin: 8px 0;
     max-width: 75%;
+    width: fit-content;
+    align-self: flex-start;
     animation: fadeInUp 0.4s ease both;
 }
 .chat-container { display: flex; flex-direction: column; }
@@ -276,7 +278,6 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 if st.session_state.show_chat:
-    st.markdown('<div class="chat-panel">', unsafe_allow_html=True)
 
     header_col1, header_col2 = st.columns([5, 1])
     with header_col1:
@@ -320,7 +321,6 @@ User question: {user_question}
         st.session_state.show_chat = False
         st.rerun()
 
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # --- Runbooks ---
 elif page == "Runbooks":
