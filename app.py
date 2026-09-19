@@ -392,7 +392,7 @@ if page == "About Me":
     st.markdown("""
     <div class="hero">
         <h1>Hi, I'm Carl 👋</h1>
-        <p>3rd-year BSIT student building toward a Cloud Engineering career. CloudGenie is my hands-on portfolio project — a working cloud operations platform with real AI integration, combining security auditing, cost optimization, live monitoring, incident response, and an AI assistant into one deployed app.</p>
+        <p>3rd-year BSIT student building toward a Cloud Engineer/Architecture career. CloudGenie is my hands-on portfolio project — a working cloud operations platform with real AI integration, combining security auditing, cost optimization, live monitoring, incident response, and an AI assistant into one deployed app.</p>
     </div>
     """, unsafe_allow_html=True)
 
