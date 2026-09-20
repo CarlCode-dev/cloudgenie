@@ -1,2 +1,8 @@
 .streamlit/secrets.toml
 venv/
+
+# Terraform ignored files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl

@@ -138,6 +138,8 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
 
 .st-key-nav_Architecture button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwb2x5Z29uIHBvaW50cz0iMTIgMiAyIDcgMTIgMTIgMjIgNyAxMiAyIi8+PHBvbHlsaW5lIHBvaW50cz0iMiAxNyAxMiAyMiAyMiAxNyIvPjxwb2x5bGluZSBwb2ludHM9IjIgMTIgMTIgMTcgMjIgMTIiLz48L3N2Zz4="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwb2x5Z29uIHBvaW50cz0iMTIgMiAyIDcgMTIgMTIgMjIgNyAxMiAyIi8+PHBvbHlsaW5lIHBvaW50cz0iMiAxNyAxMiAyMiAyMiAxNyIvPjxwb2x5bGluZSBwb2ludHM9IjIgMTIgMTIgMTcgMjIgMTIiLz48L3N2Zz4="); }
 
+.st-key-nav_Live-Deployments button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIi8+PGxpbmUgeDE9IjIiIHkxPSIxMiIgeDI9IjIyIiB5Mj0iMTIiLz48cGF0aCBkPSJNMTIgMmExNS4zIDE1LjMgMCAwIDEgNCAxMCAxNS4zIDE1LjMgMCAwIDEtNCAxMCAxNS4zIDE1LjMgMCAwIDEtNC0xMCAxNS4zIDE1LjMgMCAwIDEgNC0xMHoiLz48L3N2Zz4="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIi8+PGxpbmUgeDE9IjIiIHkxPSIxMiIgeDI9IjIyIiB5Mj0iMTIiLz48cGF0aCBkPSJNMTIgMmExNS4zIDE1LjMgMCAwIDEgNCAxMCAxNS4zIDE1LjMgMCAwIDEtNCAxMCAxNS4zIDE1LjMgMCAwIDEtNC0xMCAxNS4zIDE1LjMgMCAwIDEgNC0xMHoiLz48L3N2Zz4="); }
+
 .st-key-nav_SecOps-Auditor button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAyIDMgNnY2YzAgNSA0IDguNSA5IDEwIDUtMS41IDktNSA5LTEwVjZ6Ii8+PHBhdGggZD0ibTkgMTIgMiAyIDQtNCIvPjwvc3ZnPg=="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAyIDMgNnY2YzAgNSA0IDguNSA5IDEwIDUtMS41IDktNSA5LTEwVjZ6Ii8+PHBhdGggZD0ibTkgMTIgMiAyIDQtNCIvPjwvc3ZnPg=="); }
 
 .st-key-nav_FinOps-Optimizer button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjkiLz48cGF0aCBkPSJNMTIgN3YxME0xNSA5LjVjMC0xLjQtMS4zLTIuNS0zLTIuNXMtMyAxLjEtMyAyLjNjMCAzLjIgNiAxLjYgNiA0LjcgMCAxLjQtMS4zIDIuNS0zIDIuNXMtMy0xLjEtMy0yLjUiLz48L3N2Zz4="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjkiLz48cGF0aCBkPSJNMTIgN3YxME0xNSA5LjVjMC0xLjQtMS4zLTIuNS0zLTIuNXMtMyAxLjEtMyAyLjNjMCAzLjIgNiAxLjYgNiA0LjcgMCAxLjQtMS4zIDIuNS0zIDIuNXMtMy0xLjEtMy0yLjUiLz48L3N2Zz4="); }
@@ -586,6 +588,8 @@ nav_groups = [
         ("Incidents", "🚨"),
         ("Status", "✅"),
         ("Architecture", "🧩"),
+        ("Live Deployments", "🌐"),
+
     ]),
     ("AI Tools", [
         ("SecOps Auditor", "🛡️"),
@@ -745,10 +749,11 @@ if page == "About Me":
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("**Skills I'm building:** Cloud fundamentals · Python · Security auditing · Cost optimization · AI API integration · Git/GitHub deployment")
+    st.markdown("**Skills I'm building:** Cloud fundamentals · Python · UI/UX design · Security auditing · Cost optimization · AI API integration · Git/GitHub deployment")
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.subheader("What this project demonstrates")
+
     st.markdown("""
     <div class="card-grid">
         <div class="card"><div class="label">📊 Dashboard</div><div style="color:#9FB3CC; margin-top:8px;">At-a-glance overview of overall security score and savings found.</div></div>
@@ -756,6 +761,7 @@ if page == "About Me":
         <div class="card"><div class="label">🚨 Incidents</div><div style="color:#9FB3CC; margin-top:8px;">Auto-logged incident timeline triggered by monitoring thresholds.</div></div>
         <div class="card"><div class="label">✅ Status</div><div style="color:#9FB3CC; margin-top:8px;">Public-facing system status page reflecting live incident state.</div></div>
         <div class="card"><div class="label">🧩 Architecture</div><div style="color:#9FB3CC; margin-top:8px;">Visual system architecture diagram showing how the platform is structured.</div></div>
+        <div class="card"><div class="label">🌐 Live Deployments</div><div style="color:#9FB3CC; margin-top:8px;">Showcase of real cloud infrastructure projects deployed on AWS, GCP, or Azure.</div></div>
         <div class="card"><div class="label">🛡️ SecOps Auditor</div><div style="color:#9FB3CC; margin-top:8px;">Real AI analysis of uploaded files for security risks, with AI-generated fixes.</div></div>
         <div class="card"><div class="label">💰 FinOps Optimizer</div><div style="color:#9FB3CC; margin-top:8px;">Real AI-generated cost-saving recommendations, with a 6-month cost trend chart.</div></div>
         <div class="card"><div class="label">📖 Runbooks</div><div style="color:#9FB3CC; margin-top:8px;">AI-generated incident response runbooks for common outage scenarios.</div></div>
@@ -768,7 +774,7 @@ if page == "About Me":
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("Built end-to-end: coded in Python, integrated with Google's Gemini API for real AI analysis, version-controlled with Git/GitHub, and deployed live on Streamlit Community Cloud — a full working deployment pipeline, not just a design mockup.")
 
-    st.info("All AI-powered features (SecOps, FinOps, Ask CloudGenie, Runbooks) use real, live Gemini API responses. Some supporting data — like the 6-month billing history and live system metrics — is simulated by design, since this app isn't connected to a real cloud environment.")
+    st.info("All AI-powered features (SecOps, FinOps, Ask CloudGenie, Runbooks) use real, live Gemini API responses. Some supporting data within CloudGenie itself — like the 6-month billing history and live system metrics — is simulated by design. The Live Deployments page, however, links to genuinely real, separately-hosted cloud infrastructure projects.")
 
 # --- Dashboard ---
 elif page == "Dashboard":
@@ -986,6 +992,38 @@ elif page == "Architecture":
     with col4:
         st.markdown("**Database**")
         st.caption("Stores and retrieves persistent application data.")
+
+# --- Live Deployments ---
+elif page == "Live Deployments":
+    st.markdown("<div class='hero'><h1>Live Deployments</h1><p>Real cloud infrastructure projects I've built and deployed.</p></div>", unsafe_allow_html=True)
+
+    deployments = [
+        {
+            "name": "Example: Static Portfolio Site",
+            "provider": "AWS",
+            "description": "A simple static website hosted using S3 bucket static website hosting.",
+            "services": "S3, (optional: CloudFront, Route 53)",
+            "link": None
+        },
+    ]
+
+    for d in deployments:
+        link_html = f'<a href="{d["link"]}" target="_blank" style="color:#38E1FF; text-decoration:none; font-weight:600;">Visit live project →</a>' if d["link"] else '<span style="color:#5C6B85; font-size:13px;">Not deployed yet</span>'
+
+        card_html = f"""
+<div class="card" style="margin-bottom:16px; max-width:100%;">
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<div class="label">{d['name']}</div>
+<span style="background:rgba(56,225,255,0.1); color:#38E1FF; padding:2px 10px; border-radius:12px; font-size:11px; font-weight:700;">{d['provider']}</span>
+</div>
+<div style="color:#9FB3CC; margin-top:10px; font-size:14px;">{d['description']}</div>
+<div style="color:#5C6B85; margin-top:6px; font-size:12px;"><b>Services used:</b> {d['services']}</div>
+<div style="margin-top:12px;">{link_html}</div>
+</div>
+"""
+        st.markdown(card_html, unsafe_allow_html=True)
+
+    st.info("🚧 This is a placeholder example. More real deployments will be added here as I build and ship them on AWS, GCP, and Azure.")        
 
 # --- SecOps Auditor ---
 elif page == "SecOps Auditor":
