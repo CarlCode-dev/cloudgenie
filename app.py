@@ -367,7 +367,8 @@ components.html("""
         const ctx = c.getContext('2d');
         const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
         grad.addColorStop(0, 'rgba(255,255,255,1)');
-        grad.addColorStop(0.3, 'rgba(255,255,255,0.4)');
+        grad.addColorStop(0.15, 'rgba(255,255,255,0.7)');
+        grad.addColorStop(0.5, 'rgba(255,255,255,0.2)');
         grad.addColorStop(1, 'rgba(255,255,255,0)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, size, size);
@@ -383,7 +384,7 @@ components.html("""
     renderer.setSize(window.parent.innerWidth, window.parent.innerHeight);
     renderer.setPixelRatio(window.parent.devicePixelRatio || 1);
 
-    const particleCount = 140;
+    const particleCount = 110;
     const positions = new Float32Array(particleCount * 3);
     const originalPositions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -430,7 +431,7 @@ components.html("""
     geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
     const material = new THREE.PointsMaterial({
-        size: 2.5,
+        size: 3.5,
         map: glowTexture,
         vertexColors: true,
         transparent: true,
@@ -537,7 +538,7 @@ components.html("""
         colorAttr.needsUpdate = true;
 
         let lineIdx = 0;
-        const connectDist = 15;
+        const connectDist = 13;
         for (let i = 0; i < particleCount && lineIdx < maxLines; i++) {
             for (let j = i + 1; j < particleCount && lineIdx < maxLines; j++) {
                 const dx = currentX[i] - currentX[j];
