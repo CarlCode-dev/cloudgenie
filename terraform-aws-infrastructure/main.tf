@@ -127,22 +127,26 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
 user_data = <<-EOF
-              #!/bin/bash
-              # Update packages and install Git & Python
-              dnf update -y
-              dnf install -y git python3-pip
+            #!/bin/bash
+            # Stop default Apache server so port 80 is free
+            systemctl stop httpd
+            systemctl disable httpd
 
-              # Clone your Streamlit application repository
-              cd /home/ec2-user
-              git clone https://github.com/CarlCode-dev/cloudgenie.git
-              cd cloudgenie
+            # Update packages and install Git & Python
+            dnf update -y
+            dnf install -y git python3-pip
 
-              # Install Python dependencies
-              pip3 install -r requirements.txt
+            # Clone your GitHub repository containing app.py
+            cd /home/ec2-user
+            git clone https://github.com/CarlCode-dev/cloudgenie.git
+            cd cloudgenie
 
-              # Run Streamlit app in the background on port 80
-              nohup streamlit run app.py --server.port 80 --server.address 0.0.0.0 > streamlit.log 2>&1 &
-              EOF
+            # Install app dependencies
+            pip3 install -r requirements.txt
+
+            # Run app.py on port 80
+            nohup streamlit run app.py --server.port 80 --server.address 0.0.0.0 > streamlit.log 2>&1 &
+            EOF
 
   tags = {
     Name = "portfolio-web-server"
