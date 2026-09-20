@@ -5,6 +5,7 @@ import random
 import datetime
 import textwrap
 import google.generativeai as genai
+import streamlit.components.v1 as components
 
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 model = genai.GenerativeModel("gemini-3.6-flash")
@@ -202,35 +203,69 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     transform: translateY(-2px);
 }
 
+.st-key-chat_panel_container {
+    position: fixed;
+    bottom: 100px;
+    right: 24px;
+    width: 380px;
+    max-height: 65vh;
+    z-index: 9998;
+    background: rgba(15, 20, 35, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(177,78,255,0.3);
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages-scroll {
+    max-height: 320px;
+    overflow-y: auto;
+    padding-right: 4px;
+    margin-bottom: 10px;
+}
+.chat-messages-scroll::-webkit-scrollbar { width: 6px; }
+.chat-messages-scroll::-webkit-scrollbar-thumb {
+    background: rgba(177,78,255,0.4);
+    border-radius: 10px;
+}
+
 .chat-bubble-user {
     background: linear-gradient(90deg, #1B8FD1, #38E1FF);
     color: #06121F;
-    border-radius: 16px 16px 4px 16px;
-    padding: 12px 18px;
-    margin: 8px 0;
-    max-width: 75%;
+    border-radius: 14px 14px 4px 14px;
+    padding: 10px 14px;
+    margin: 6px 0;
+    max-width: 85%;
+    width: fit-content;
     margin-left: auto;
+    font-size: 14px;
     font-weight: 500;
     animation: fadeInUp 0.4s ease both;
 }
 .chat-bubble-ai {
     background: linear-gradient(90deg, #B14EFF, #FF6EC7);
     color: white;
-    border-radius: 16px 16px 16px 4px;
-    padding: 12px 18px;
-    margin: 8px 0;
-    max-width: 75%;
+    border-radius: 14px 14px 14px 4px;
+    padding: 10px 14px;
+    margin: 6px 0;
+    max-width: 85%;
     width: fit-content;
     align-self: flex-start;
+    font-size: 14px;
     animation: fadeInUp 0.4s ease both;
 }
 .chat-container { display: flex; flex-direction: column; }
-.chat-panel {
-    border: 1px solid rgba(177,78,255,0.3);
-    border-radius: 18px;
-    padding: 24px;
-    margin-bottom: 24px;
-    background: rgba(20,10,35,0.4);
+
+.st-key-close_chat_btn button {
+    background: linear-gradient(90deg, #1B8FD1, #38E1FF) !important;
+    color: #06121F !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
 }
 
 </style>
@@ -278,48 +313,49 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 if st.session_state.show_chat:
+    with st.container(key="chat_panel_container"):
+        header_col1, header_col2 = st.columns([5, 1])
+        with header_col1:
+            st.markdown("**💬 Ask CloudGenie**")
+        with header_col2:
+            with st.container(key="close_chat_btn"):
+                closed = st.button("✕")
 
-    header_col1, header_col2 = st.columns([5, 1])
-    with header_col1:
-        st.subheader("💬 Ask CloudGenie")
-    with header_col2:
-        closed = st.button("✕ Close", key="close_chat_btn")
+        if len(st.session_state.chat_history) == 0:
+            st.info("👋 I'm specialized in cloud engineering, DevOps, security, and cost optimization topics only.")
 
-    if len(st.session_state.chat_history) == 0:
-        st.info("👋 I'm specialized in cloud engineering, DevOps, security, and cost optimization topics only. Ask me about AWS, Azure, GCP, Kubernetes, CI/CD, or cloud cost management — I'll politely decline anything unrelated.")
+        chat_html = '<div class="chat-messages-scroll"><div class="chat-container">'
+        for msg in st.session_state.chat_history:
+            css_class = "chat-bubble-user" if msg["role"] == "user" else "chat-bubble-ai"
+            chat_html += f'<div class="{css_class}">{msg["content"]}</div>'
+        chat_html += '</div></div>'
+        st.markdown(chat_html, unsafe_allow_html=True)
 
-    chat_html = '<div class="chat-container">'
-    for msg in st.session_state.chat_history:
-        css_class = "chat-bubble-user" if msg["role"] == "user" else "chat-bubble-ai"
-        chat_html += f'<div class="{css_class}">{msg["content"]}</div>'
-    chat_html += '</div>'
-    st.markdown(chat_html, unsafe_allow_html=True)
+        with st.form(key="chat_form", clear_on_submit=True):
+            col_input, col_send = st.columns([4, 1])
+            with col_input:
+                user_question = st.text_input("Type your question...", label_visibility="collapsed")
+            with col_send:
+                submitted = st.form_submit_button("Send")
 
-    with st.form(key="chat_form", clear_on_submit=True):
-        col_input, col_send = st.columns([6, 1])
-        with col_input:
-            user_question = st.text_input("Type your question...", label_visibility="collapsed")
-        with col_send:
-            submitted = st.form_submit_button("Send")
-
-    if submitted and user_question.strip():
-        st.session_state.chat_history.append({"role": "user", "content": user_question})
-        with st.spinner("Thinking..."):
-            chat_prompt = f"""You are CloudGenie, a friendly AI assistant specialized in cloud engineering, DevOps, security operations, and cost optimization. Answer clearly and concisely (2-4 sentences unless more detail is genuinely needed). If the question is unrelated to cloud/DevOps/tech topics, politely redirect the user back to cloud-related topics instead of answering.
+        if submitted and user_question.strip():
+            st.session_state.chat_history.append({"role": "user", "content": user_question})
+            with st.spinner("Thinking..."):
+                chat_prompt = f"""You are CloudGenie, a friendly AI assistant specialized in cloud engineering, DevOps, security operations, and cost optimization. Answer clearly and concisely (2-4 sentences unless more detail is genuinely needed). If the question is unrelated to cloud/DevOps/tech topics, politely redirect the user back to cloud-related topics instead of answering.
 
 User question: {user_question}
 """
-            try:
-                response = model.generate_content(chat_prompt)
-                answer = response.text.strip()
-            except Exception as e:
-                answer = "⏳ Rate limit reached — please wait about 30-60 seconds and try again."
-        st.session_state.chat_history.append({"role": "ai", "content": answer})
-        st.rerun()
+                try:
+                    response = model.generate_content(chat_prompt)
+                    answer = response.text.strip()
+                except Exception as e:
+                    answer = "⏳ Rate limit reached — please wait about 30-60 seconds and try again."
+            st.session_state.chat_history.append({"role": "ai", "content": answer})
+            st.rerun()
 
-    if closed:
-        st.session_state.show_chat = False
-        st.rerun()
+        if closed:
+            st.session_state.show_chat = False
+            st.rerun()
 
 
 # --- Runbooks ---
@@ -387,6 +423,13 @@ with st.container(key="floating_chat_btn"):
         st.session_state.show_chat = not st.session_state.show_chat
         st.rerun()
 
+if st.session_state.get("show_chat"):
+    components.html("""
+    <script>
+        window.parent.document.querySelector('section.main').scrollTo({top: 0, behavior: 'instant'});
+    </script>
+    """, height=0)
+
 # --- About Me ---
 if page == "About Me":
     st.markdown("""
@@ -396,7 +439,7 @@ if page == "About Me":
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("**Skills I'm building:** Cloud fundamentals · Python · AWS basics · Security auditing · Cost optimization")
+    st.markdown("**Skills I'm building:** Cloud fundamentals · Python · Security auditing · Cost optimization · AI API integration · Git/GitHub deployment")
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.subheader("What this project demonstrates")
