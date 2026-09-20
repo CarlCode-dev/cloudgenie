@@ -50,36 +50,99 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     50% { transform: translateY(-4px); }
 }
 
+.sidebar-section-label {
+    color: #5C6B85;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 20px 0 6px 4px;
+}
+
 [data-testid="stSidebar"] .stButton>button {
     width: 100%;
     text-align: left;
     background: transparent;
-    color: #9FB3CC;
-    border: 1px solid transparent;
-    border-radius: 12px;
-    padding: 10px 14px;
-    font-weight: 500;
-    margin-bottom: 4px;
+    color: #FFFFFF;
+    border: none;
+    border-left: 2px solid transparent;
+    border-radius: 6px;
+    padding: 8px 12px 8px 38px;
+    font-weight: 400;
+    font-size: 14px;
+    margin-bottom: 2px;
     box-shadow: none;
-    transition: all 0.25s ease;
+    position: relative;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-testid="stSidebar"] .stButton>button::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%) scale(1);
+    width: 16px;
+    height: 16px;
+    background-color: #FFFFFF;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 [data-testid="stSidebar"] .stButton>button:hover {
-    background: rgba(56,225,255,0.08);
-    color: #38E1FF;
-    transform: translateX(4px);
+    background: rgba(56,225,255,0.05);
+    color: #C7D6E8;
+    border-left: 2px solid rgba(56,225,255,0.3);
+    transform: translateX(3px);
     box-shadow: none;
+}
+[data-testid="stSidebar"] .stButton>button:hover::before {
+    background-color: #38E1FF;
+    transform: translateY(-50%) scale(1.1);
 }
 
 [data-testid="stSidebar"] .stButton>button[kind="primary"] {
-    background: linear-gradient(90deg, rgba(56,225,255,0.15), rgba(56,225,255,0.03));
+    background: rgba(56,225,255,0.07);
     color: #38E1FF;
-    border-left: 3px solid #38E1FF;
-    border-radius: 10px;
-    box-shadow: 0 0 18px rgba(56,225,255,0.15);
+    border-left: 2px solid #38E1FF;
+    border-radius: 6px;
+    font-weight: 600;
+    box-shadow: none;
+    animation: navSlideIn 0.3s ease;
+}
+[data-testid="stSidebar"] .stButton>button[kind="primary"]::before {
+    background-color: #38E1FF;
+    filter: drop-shadow(0 0 4px rgba(56,225,255,0.6));
 }
 [data-testid="stSidebar"] .stButton>button[kind="primary"]:hover {
     transform: none;
+    background: rgba(56,225,255,0.1);
 }
+@keyframes navSlideIn {
+    from { border-left-width: 0px; background: rgba(56,225,255,0); }
+    to { border-left-width: 2px; background: rgba(56,225,255,0.07); }
+}
+
+.st-key-nav_About\ Me button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iOCIgcj0iNCIvPjxwYXRoIGQ9Ik00IDIwYzAtNCAzLjUtNiA4LTZzOCAyIDggNiIvPjwvc3ZnPg=="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iOCIgcj0iNCIvPjxwYXRoIGQ9Ik00IDIwYzAtNCAzLjUtNiA4LTZzOCAyIDggNiIvPjwvc3ZnPg=="); }
+
+.st-key-nav_Dashboard button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxyZWN0IHg9IjMiIHk9IjMiIHdpZHRoPSI3IiBoZWlnaHQ9IjciIHJ4PSIxIi8+PHJlY3QgeD0iMTQiIHk9IjMiIHdpZHRoPSI3IiBoZWlnaHQ9IjciIHJ4PSIxIi8+PHJlY3QgeD0iMyIgeT0iMTQiIHdpZHRoPSI3IiBoZWlnaHQ9IjciIHJ4PSIxIi8+PHJlY3QgeD0iMTQiIHk9IjE0IiB3aWR0aD0iNyIgaGVpZ2h0PSI3IiByeD0iMSIvPjwvc3ZnPg=="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxyZWN0IHg9IjMiIHk9IjMiIHdpZHRoPSI3IiBoZWlnaHQ9IjciIHJ4PSIxIi8+PHJlY3QgeD0iMTQiIHk9IjMiIHdpZHRoPSI3IiBoZWlnaHQ9IjciIHJ4PSIxIi8+PHJlY3QgeD0iMyIgeT0iMTQiIHdpZHRoPSI3IiBoZWlnaHQ9IjciIHJ4PSIxIi8+PHJlY3QgeD0iMTQiIHk9IjE0IiB3aWR0aD0iNyIgaGVpZ2h0PSI3IiByeD0iMSIvPjwvc3ZnPg=="); }
+
+.st-key-nav_Monitoring button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwb2x5bGluZSBwb2ludHM9IjIyIDEyIDE4IDEyIDE1IDIxIDkgMyA2IDEyIDIgMTIiLz48L3N2Zz4="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwb2x5bGluZSBwb2ludHM9IjIyIDEyIDE4IDEyIDE1IDIxIDkgMyA2IDEyIDIgMTIiLz48L3N2Zz4="); }
+
+.st-key-nav_Incidents button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMC4yOSAzLjg2IDEuODIgMThhMiAyIDAgMCAwIDEuNzEgM2gxNi45NGEyIDIgMCAwIDAgMS43MS0zTDEzLjcxIDMuODZhMiAyIDAgMCAwLTMuNDIgMFoiLz48bGluZSB4MT0iMTIiIHkxPSI5IiB4Mj0iMTIiIHkyPSIxMyIvPjxsaW5lIHgxPSIxMiIgeTE9IjE3IiB4Mj0iMTIuMDEiIHkyPSIxNyIvPjwvc3ZnPg=="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMC4yOSAzLjg2IDEuODIgMThhMiAyIDAgMCAwIDEuNzEgM2gxNi45NGEyIDIgMCAwIDAgMS43MS0zTDEzLjcxIDMuODZhMiAyIDAgMCAwLTMuNDIgMFoiLz48bGluZSB4MT0iMTIiIHkxPSI5IiB4Mj0iMTIiIHkyPSIxMyIvPjxsaW5lIHgxPSIxMiIgeTE9IjE3IiB4Mj0iMTIuMDEiIHkyPSIxNyIvPjwvc3ZnPg=="); }
+
+.st-key-nav_Status button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMiAxMS4wOFYxMmExMCAxMCAwIDEgMS01LjkzLTkuMTQiLz48cG9seWxpbmUgcG9pbnRzPSIyMiA0IDEyIDE0LjAxIDkgMTEuMDEiLz48L3N2Zz4="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMiAxMS4wOFYxMmExMCAxMCAwIDEgMS01LjkzLTkuMTQiLz48cG9seWxpbmUgcG9pbnRzPSIyMiA0IDEyIDE0LjAxIDkgMTEuMDEiLz48L3N2Zz4="); }
+
+.st-key-nav_Architecture button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwb2x5Z29uIHBvaW50cz0iMTIgMiAyIDcgMTIgMTIgMjIgNyAxMiAyIi8+PHBvbHlsaW5lIHBvaW50cz0iMiAxNyAxMiAyMiAyMiAxNyIvPjxwb2x5bGluZSBwb2ludHM9IjIgMTIgMTIgMTcgMjIgMTIiLz48L3N2Zz4="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwb2x5Z29uIHBvaW50cz0iMTIgMiAyIDcgMTIgMTIgMjIgNyAxMiAyIi8+PHBvbHlsaW5lIHBvaW50cz0iMiAxNyAxMiAyMiAyMiAxNyIvPjxwb2x5bGluZSBwb2ludHM9IjIgMTIgMTIgMTcgMjIgMTIiLz48L3N2Zz4="); }
+
+.st-key-nav_SecOps\ Auditor button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAyIDMgNnY2YzAgNSA0IDguNSA5IDEwIDUtMS41IDktNSA5LTEwVjZ6Ii8+PHBhdGggZD0ibTkgMTIgMiAyIDQtNCIvPjwvc3ZnPg=="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAyIDMgNnY2YzAgNSA0IDguNSA5IDEwIDUtMS41IDktNSA5LTEwVjZ6Ii8+PHBhdGggZD0ibTkgMTIgMiAyIDQtNCIvPjwvc3ZnPg=="); }
+
+.st-key-nav_FinOps\ Optimizer button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjkiLz48cGF0aCBkPSJNMTIgN3YxME0xNSA5LjVjMC0xLjQtMS4zLTIuNS0zLTIuNXMtMyAxLjEtMyAyLjNjMCAzLjIgNiAxLjYgNiA0LjcgMCAxLjQtMS4zIDIuNS0zIDIuNXMtMy0xLjEtMy0yLjUiLz48L3N2Zz4="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjkiLz48cGF0aCBkPSJNMTIgN3YxME0xNSA5LjVjMC0xLjQtMS4zLTIuNS0zLTIuNXMtMyAxLjEtMyAyLjNjMCAzLjIgNiAxLjYgNiA0LjcgMCAxLjQtMS4zIDIuNS0zIDIuNXMtMy0xLjEtMy0yLjUiLz48L3N2Zz4="); }
+
+.st-key-nav_Runbooks button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik00IDE5LjVBMi41IDIuNSAwIDAgMSA2LjUgMTdIMjAiLz48cGF0aCBkPSJNNi41IDJIMjB2MjBINi41QTIuNSAyLjUgMCAwIDEgNCAxOS41di0xNUEyLjUgMi41IDAgMCAxIDYuNSAyWiIvPjwvc3ZnPg=="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik00IDE5LjVBMi41IDIuNSAwIDAgMSA2LjUgMTdIMjAiLz48cGF0aCBkPSJNNi41IDJIMjB2MjBINi41QTIuNSAyLjUgMCAwIDEgNCAxOS41di0xNUEyLjUgMi41IDAgMCAxIDYuNSAyWiIvPjwvc3ZnPg=="); }
 
 .sidebar-footer {
     display: flex;
@@ -274,26 +337,34 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
 if "page" not in st.session_state:
     st.session_state.page = "About Me"
 
-nav_items = [
-    ("About Me", "👤"),
-    ("Dashboard", "📊"),
-    ("Monitoring", "📈"),
-    ("Incidents", "🚨"),
-    ("Status", "✅"),
-    ("Architecture", "🧩"),
-    ("SecOps Auditor", "🛡️"),
-    ("FinOps Optimizer", "💰"),
-    ("Runbooks", "📖"),
+nav_groups = [
+    (None, [("About Me", "👤")]),
+    ("Overview", [
+        ("Dashboard", "📊"),
+        ("Monitoring", "📈"),
+        ("Incidents", "🚨"),
+        ("Status", "✅"),
+        ("Architecture", "🧩"),
+    ]),
+    ("AI Tools", [
+        ("SecOps Auditor", "🛡️"),
+        ("FinOps Optimizer", "💰"),
+        ("Runbooks", "📖"),
+    ]),
 ]
 
 st.sidebar.markdown("<div class='sidebar-logo'>☁️ <span>CloudGenie</span></div>", unsafe_allow_html=True)
 
-for label, icon in nav_items:
-    is_active = st.session_state.page == label
-    if st.sidebar.button(f"{icon}   {label}", key=f"nav_{label}",
-                          use_container_width=True,
-                          type="primary" if is_active else "secondary"):
-        st.session_state.page = label
+for section_label, items in nav_groups:
+    if section_label:
+        st.sidebar.markdown(f'<div class="sidebar-section-label">{section_label}</div>', unsafe_allow_html=True)
+    for label, icon in items:
+        is_active = st.session_state.page == label
+        with st.sidebar.container(key=f"nav_{label}"):
+            if st.button(f"  {label}", key=f"navbtn_{label}",
+                         use_container_width=True,
+                         type="primary" if is_active else "secondary"):
+                st.session_state.page = label
 
 st.sidebar.markdown("""
 <div class="sidebar-footer">
@@ -467,10 +538,33 @@ if page == "About Me":
 # --- Dashboard ---
 elif page == "Dashboard":
     st.markdown("<div class='hero'><h1>Dashboard</h1><p>Welcome to CloudGenie — your AI-powered cloud engineering portfolio.</p></div>", unsafe_allow_html=True)
-    st.markdown("""
+
+    secops_findings = st.session_state.get("secops_findings")
+    if secops_findings is not None:
+        score = 100
+        for f in secops_findings:
+            risk = f.get("risk", "Low")
+            score -= {"High": 20, "Medium": 10, "Low": 5}.get(risk, 5)
+        score = max(score, 0)
+        security_value = f"{score}/100"
+    else:
+        security_value = "Run a scan first"
+
+    finops_recs = st.session_state.get("finops_recommendations")
+    if finops_recs is not None:
+        total = 0
+        for r in finops_recs:
+            digits = "".join(c for c in r.get("estimated_savings", "") if c.isdigit())
+            if digits:
+                total += int(digits)
+        savings_value = f"${total}/month" if total > 0 else "No savings found"
+    else:
+        savings_value = "Run FinOps analysis first"
+
+    st.markdown(f"""
     <div class="card-grid">
-        <div class="card"><div class="label">Security Score</div><div class="value glow">82/100</div></div>
-        <div class="card"><div class="label">Monthly Savings Found</div><div class="value glow">$340</div></div>
+        <div class="card"><div class="label">Security Score</div><div class="value glow">{security_value}</div></div>
+        <div class="card"><div class="label">Monthly Savings Found</div><div class="value glow">{savings_value}</div></div>
     </div>
     """, unsafe_allow_html=True)
 
