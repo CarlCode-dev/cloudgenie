@@ -331,8 +331,248 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     font-weight: 700 !important;
 }
 
+#chat-drag-handle:active {
+    cursor: grabbing;
+}
+
 </style>
 """, unsafe_allow_html=True)
+
+components.html("""
+<div id="particle-mount"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function() {
+    const doc = window.parent.document;
+
+    let canvas = doc.getElementById('particle-canvas');
+    if (canvas) canvas.remove();
+    canvas = doc.createElement('canvas');
+    canvas.id = 'particle-canvas';
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.zIndex = '0';
+    canvas.style.pointerEvents = 'none';
+    doc.body.appendChild(canvas);
+
+    const THREE = window.parent.THREE || window.THREE;
+
+    function makeGlowTexture() {
+        const size = 64;
+        const c = doc.createElement('canvas');
+        c.width = size; c.height = size;
+        const ctx = c.getContext('2d');
+        const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+        grad.addColorStop(0, 'rgba(255,255,255,1)');
+        grad.addColorStop(0.3, 'rgba(255,255,255,0.4)');
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, size, size);
+        return new THREE.CanvasTexture(c);
+    }
+    const glowTexture = makeGlowTexture();
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.parent.innerWidth / window.parent.innerHeight, 0.1, 1000);
+    camera.position.z = 50;
+
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setSize(window.parent.innerWidth, window.parent.innerHeight);
+    renderer.setPixelRatio(window.parent.devicePixelRatio || 1);
+
+    const particleCount = 140;
+    const positions = new Float32Array(particleCount * 3);
+    const originalPositions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    const baseColors = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+    const twinklePhase = new Float32Array(particleCount);
+    const twinkleSpeed = new Float32Array(particleCount);
+    const brightness = new Float32Array(particleCount);
+
+    const cyan = new THREE.Color(0x38E1FF);
+    const white = new THREE.Color(0xFFFFFF);
+
+    for (let i = 0; i < particleCount; i++) {
+        const edgeBias = Math.random() < 0.7;
+        let x, y;
+        if (edgeBias) {
+            const angle = Math.random() * Math.PI * 2;
+            const radius = 35 + Math.random() * 25;
+            x = Math.cos(angle) * radius;
+            y = Math.sin(angle) * radius * 0.6;
+        } else {
+            x = (Math.random() - 0.5) * 100;
+            y = (Math.random() - 0.5) * 60;
+        }
+        const z = (Math.random() - 0.5) * 60;
+        positions[i*3] = x; positions[i*3+1] = y; positions[i*3+2] = z;
+        originalPositions[i*3] = x; originalPositions[i*3+1] = y; originalPositions[i*3+2] = z;
+
+        const c = Math.random() > 0.6 ? white : cyan;
+        baseColors[i*3] = c.r; baseColors[i*3+1] = c.g; baseColors[i*3+2] = c.b;
+        colors[i*3] = c.r; colors[i*3+1] = c.g; colors[i*3+2] = c.b;
+
+        const isStandout = Math.random() < 0.12;
+        sizes[i] = isStandout ? (Math.random() * 1 + 2.2) : (Math.random() * 1 + 0.6);
+        brightness[i] = isStandout ? 1.0 : (Math.random() * 0.4 + 0.25);
+
+        twinklePhase[i] = Math.random() * Math.PI * 2;
+        twinkleSpeed[i] = Math.random() * 0.015 + 0.008;
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+    const material = new THREE.PointsMaterial({
+        size: 2.5,
+        map: glowTexture,
+        vertexColors: true,
+        transparent: true,
+        opacity: 1,
+        sizeAttenuation: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+    });
+
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+
+    const maxLines = particleCount * 3;
+    const linePositions = new Float32Array(maxLines * 2 * 3);
+    const lineColors = new Float32Array(maxLines * 2 * 3);
+    const lineGeometry = new THREE.BufferGeometry();
+    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+    lineGeometry.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
+    lineGeometry.setDrawRange(0, 0);
+    const lineMaterial = new THREE.LineBasicMaterial({
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.12,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    });
+    const lineSegments = new THREE.LineSegments(lineGeometry, lineMaterial);
+    scene.add(lineSegments);
+
+    let mouseX = 0, mouseY = 0;
+    let targetMouseWorld = new THREE.Vector3(0, 0, 0);
+
+    doc.addEventListener('mousemove', function(e) {
+        mouseX = (e.clientX / window.parent.innerWidth) * 2 - 1;
+        mouseY = -(e.clientY / window.parent.innerHeight) * 2 + 1;
+    });
+
+    function onResize() {
+        camera.aspect = window.parent.innerWidth / window.parent.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.parent.innerWidth, window.parent.innerHeight);
+    }
+    window.parent.addEventListener('resize', onResize);
+
+    const currentX = new Float32Array(particleCount);
+    const currentY = new Float32Array(particleCount);
+    const currentZ = new Float32Array(particleCount);
+    for (let i = 0; i < particleCount; i++) {
+        currentX[i] = originalPositions[i*3];
+        currentY[i] = originalPositions[i*3+1];
+        currentZ[i] = originalPositions[i*3+2];
+    }
+
+    let time = 0;
+    function animate() {
+        time += 0.003;
+
+        const vector = new THREE.Vector3(mouseX, mouseY, 0.5);
+        vector.unproject(camera);
+        const dir = vector.sub(camera.position).normalize();
+        const distance = -camera.position.z / dir.z;
+        targetMouseWorld = camera.position.clone().add(dir.multiplyScalar(distance));
+
+        const posAttr = geometry.attributes.position;
+        const colorAttr = geometry.attributes.color;
+
+        for (let i = 0; i < particleCount; i++) {
+            const depthFactor = 0.5 + ((originalPositions[i*3+2] + 30) / 60) * 0.5;
+
+            const ox = originalPositions[i*3] + Math.sin(time * depthFactor + i) * 1.5;
+            const oy = originalPositions[i*3+1] + Math.cos(time * 1.2 * depthFactor + i) * 1.5;
+            const oz = originalPositions[i*3+2];
+
+            const dx = ox - targetMouseWorld.x;
+            const dy = oy - targetMouseWorld.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+
+            let px = ox, py = oy;
+            const repelRadius = 15;
+            if (dist < repelRadius) {
+                const force = (1 - dist / repelRadius) * 8;
+                px = ox + (dx / (dist || 1)) * force;
+                py = oy + (dy / (dist || 1)) * force;
+            }
+
+            currentX[i] += (px - currentX[i]) * 0.1;
+            currentY[i] += (py - currentY[i]) * 0.1;
+            currentZ[i] = oz;
+
+            posAttr.array[i*3] = currentX[i];
+            posAttr.array[i*3+1] = currentY[i];
+            posAttr.array[i*3+2] = currentZ[i];
+
+            const distFromCenter = Math.sqrt(ox*ox + oy*oy) / 45;
+            const centerFade = Math.min(1, Math.max(0.15, distFromCenter));
+            const twinkle = 0.6 + 0.4 * Math.sin(time * 40 * twinkleSpeed[i] * 20 + twinklePhase[i]);
+            const finalBrightness = brightness[i] * centerFade * twinkle;
+
+            colorAttr.array[i*3] = baseColors[i*3] * finalBrightness;
+            colorAttr.array[i*3+1] = baseColors[i*3+1] * finalBrightness;
+            colorAttr.array[i*3+2] = baseColors[i*3+2] * finalBrightness;
+        }
+        posAttr.needsUpdate = true;
+        colorAttr.needsUpdate = true;
+
+        let lineIdx = 0;
+        const connectDist = 15;
+        for (let i = 0; i < particleCount && lineIdx < maxLines; i++) {
+            for (let j = i + 1; j < particleCount && lineIdx < maxLines; j++) {
+                const dx = currentX[i] - currentX[j];
+                const dy = currentY[i] - currentY[j];
+                const dz = currentZ[i] - currentZ[j];
+                const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                if (d < connectDist) {
+                    const base = lineIdx * 6;
+                    linePositions[base] = currentX[i]; linePositions[base+1] = currentY[i]; linePositions[base+2] = currentZ[i];
+                    linePositions[base+3] = currentX[j]; linePositions[base+4] = currentY[j]; linePositions[base+5] = currentZ[j];
+                    const cbase = lineIdx * 6;
+                    lineColors[cbase] = 0.22; lineColors[cbase+1] = 0.88; lineColors[cbase+2] = 1.0;
+                    lineColors[cbase+3] = 0.22; lineColors[cbase+4] = 0.88; lineColors[cbase+5] = 1.0;
+                    lineIdx++;
+                }
+            }
+        }
+        lineGeometry.attributes.position.needsUpdate = true;
+        lineGeometry.attributes.color.needsUpdate = true;
+        lineGeometry.setDrawRange(0, lineIdx * 2);
+
+        camera.position.x += (mouseX * 5 - camera.position.x) * 0.02;
+        camera.position.y += (mouseY * 5 - camera.position.y) * 0.02;
+        camera.lookAt(scene.position);
+
+        renderer.render(scene, camera);
+        window.parent.requestAnimationFrame(animate);
+    }
+    animate();
+})();
+</script>
+""", height=0)
+
+if "page" not in st.session_state:
+    st.session_state.page = "About Me"
 
 if "page" not in st.session_state:
     st.session_state.page = "About Me"
@@ -387,7 +627,7 @@ if st.session_state.show_chat:
     with st.container(key="chat_panel_container"):
         header_col1, header_col2 = st.columns([5, 1])
         with header_col1:
-            st.markdown("**💬 Ask CloudGenie**")
+            st.markdown('<div id="chat-drag-handle" style="cursor:move; font-weight:700;">💬 Ask CloudGenie</div>', unsafe_allow_html=True)
         with header_col2:
             with st.container(key="close_chat_btn"):
                 closed = st.button("✕")
@@ -494,12 +734,6 @@ with st.container(key="floating_chat_btn"):
         st.session_state.show_chat = not st.session_state.show_chat
         st.rerun()
 
-if st.session_state.get("show_chat"):
-    components.html("""
-    <script>
-        window.parent.document.querySelector('section.main').scrollTo({top: 0, behavior: 'instant'});
-    </script>
-    """, height=0)
 
 # --- About Me ---
 if page == "About Me":
@@ -885,3 +1119,53 @@ Billing data:
 """
             cards_html += '</div>'
             st.markdown(cards_html, unsafe_allow_html=True)
+
+components.html("""
+<script>
+(function() {
+    const doc = window.parent.document;
+    console.log("DRAG SCRIPT LOADED");
+    let isDragging = false;
+    let offsetX = 0, offsetY = 0;
+
+    doc.addEventListener('mousedown', function(e) {
+        const handle = e.target.closest('#chat-drag-handle');
+        if (!handle) return;
+
+        const panel = doc.querySelector('.st-key-chat_panel_container');
+        if (!panel) return;
+
+        isDragging = true;
+        const rect = panel.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        panel.style.right = 'auto';
+        panel.style.bottom = 'auto';
+        panel.style.left = rect.left + 'px';
+        panel.style.top = rect.top + 'px';
+
+        e.preventDefault();
+    });
+
+    doc.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        const panel = doc.querySelector('.st-key-chat_panel_container');
+        if (!panel) return;
+
+        let newX = e.clientX - offsetX;
+        let newY = e.clientY - offsetY;
+
+        newX = Math.max(0, Math.min(newX, window.parent.innerWidth - panel.offsetWidth));
+        newY = Math.max(0, Math.min(newY, window.parent.innerHeight - panel.offsetHeight));
+
+        panel.style.left = newX + 'px';
+        panel.style.top = newY + 'px';
+    });
+
+    doc.addEventListener('mouseup', function() {
+        isDragging = false;
+    });
+})();
+</script>
+""", height=0)
