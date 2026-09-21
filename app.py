@@ -1003,11 +1003,11 @@ elif page == "Live Deployments":
 
     deployments = [
         {
-            "name": "Example: Static Portfolio Site",
+            "name": "CloudGenie — Live AWS Deployment",
             "provider": "AWS",
-            "description": "A simple static website hosted using S3 bucket static website hosting.",
-            "services": "S3, (optional: CloudFront, Route 53)",
-            "link": None
+            "description": "This same CloudGenie app, self-provisioned on real AWS infrastructure rather than a managed platform — built entirely with Terraform (Infrastructure as Code).",
+            "services": "EC2 (t3.micro), VPC, Internet Gateway, Security Groups, EBS — provisioned via Terraform",
+            "link": "http://32.195.126.106"
         },
     ]
 
