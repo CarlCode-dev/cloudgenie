@@ -113,24 +113,33 @@ resource "aws_instance" "web" {
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
+  key_name                = "cloudgenie-key"
+  
+  root_block_device {
+    volume_size = 20
+    volume_type = "gp3"
+  }
+
 
   user_data = <<-EOF
-              #!/bin/bash
-              systemctl stop httpd
-              systemctl disable httpd
-
-              dnf update -y
-              dnf install -y git python3-pip
-
-              cd /home/ec2-user
-              git clone https://github.com/CarlCode-dev/cloudgenie.git
-              cd cloudgenie
-
-              pip3 install -r requirements.txt
-
-              nohup streamlit run app.py --server.port 80 --server.address 0.0.0.0 > streamlit.log 2>&1 &
-              EOF
-
+            #!/bin/bash
+            set -x
+            exec > >(tee /var/log/user-data.log | logger -t user-data) 2>&1
+            sudo dnf update -y
+            sudo dnf install -y python3-pip git
+            cd /home/ec2-user
+            git clone https://github.com/CarlCode-dev/cloudgenie.git
+            cd cloudgenie
+            python3 -m venv venv
+            source venv/bin/activate
+            mkdir -p .streamlit
+            cat > .streamlit/secrets.toml << 'SECRETS'
+            GEMINI_API_KEY = "${var.gemini_api_key}"
+            SECRETS
+            pip install --upgrade pip
+            pip install -r requirements.txt
+            nohup venv/bin/python3 -m streamlit run app.py --server.port 80 --server.address 0.0.0.0 > /var/log/streamlit.log 2>&1 &
+            EOF
   tags = {
     Name = "portfolio-web-server"
   }

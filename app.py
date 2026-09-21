@@ -37,6 +37,10 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     border-right: 1px solid rgba(56, 225, 255, 0.15);
 }
 
+[data-testid="stFormSubmitButton"] button {
+    white-space: nowrap;
+}
+
 .sidebar-logo {
     font-size: 22px;
     font-weight: 700;
@@ -914,13 +918,13 @@ elif page == "Status":
     st.markdown("<br>", unsafe_allow_html=True)
     st.subheader("Components")
 
-    components = [
+    status_components = [
         ("SecOps Auditor", "Operational"),
         ("FinOps Optimizer", "Operational"),
         ("Monitoring Engine", "Degraded" if open_incidents else "Operational"),
         ("Incident Tracker", "Operational"),
     ]
-    for name, status in components:
+    for name, status in status_components:
         badge_class = "badge-resolved" if status == "Operational" else "badge-open"
         dot = "🟢" if status == "Operational" else "🟠"
         st.markdown(f"""

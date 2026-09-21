@@ -6,3 +6,10 @@ venv/
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+
+terraform-aws-infrastructure/cloudgenie-key1.pem
+
+terraform-aws-infrastructure/.terraform/
+terraform-aws-infrastructure/terraform.tfstate
+terraform-aws-infrastructure/terraform.tfstate.backup
+terraform-aws-infrastructure/*.tfvars
