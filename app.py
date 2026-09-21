@@ -620,7 +620,8 @@ st.sidebar.markdown("""
     <div class="avatar">CD</div>
     <div>
         <div class="name">Carlito Dignos</div>
-        <a class="link" href="https://github.com/CarlCode-dev" target="_blank">github.com/CarlCode-dev</a>
+        <a class="link" href="https://github.com/CarlCode-dev" target="_blank">github.com/CarlCode-dev</a><br>
+        <a class="link" href="https://www.linkedin.com/in/carlito-dignos-b270a5439/" target="_blank">LinkedIn</a>
     </div>
 </div>
 """, unsafe_allow_html=True)
