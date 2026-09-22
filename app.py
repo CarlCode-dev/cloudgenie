@@ -42,13 +42,22 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
 }
 
 .sidebar-logo {
-    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 12px;
+    font-size: 24px;
     font-weight: 700;
+    letter-spacing: -0.5px;
     color: #E6F1FF;
-    padding: 8px 4px 24px 4px;
+    padding: 4px 4px 12px 4px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(56,225,255,0.08);
     animation: floaty 3s ease-in-out infinite;
 }
 .sidebar-logo span { color: #38E1FF; text-shadow: 0 0 14px rgba(56,225,255,0.5); }
+
 @keyframes floaty {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-4px); }
@@ -60,22 +69,21 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    margin: 20px 0 6px 4px;
+    margin: 12px 0 4px 4px;
 }
 
 [data-testid="stSidebar"] .stButton>button {
     width: 100%;
     text-align: left;
-    background: transparent; !important;
-    color: #FFFFFF; !important;
+    background: linear-gradient(90deg, #1B8FD1, #38E1FF) !important;
+    color: #06121F !important;
     border: none;
-    border-left: 2px solid transparent;
-    border-radius: 6px;
-    padding: 8px 12px 8px 38px;
-    font-weight: 400;
+    border-radius: 12px;
+    padding: 7px 14px 7px 38px;
+    font-weight: 500;
     font-size: 14px;
-    margin-bottom: 2px;
-    box-shadow: none;
+    margin-bottom: 5px;
+    box-shadow: 0 4px 14px rgba(56,225,255,0.15);
     position: relative;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -87,7 +95,7 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     transform: translateY(-50%) scale(1);
     width: 16px;
     height: 16px;
-    background-color: #FFFFFF;
+    background-color: #06121F;
     mask-size: contain;
     mask-repeat: no-repeat;
     mask-position: center;
@@ -97,37 +105,20 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 [data-testid="stSidebar"] .stButton>button:hover {
-    background: rgba(56,225,255,0.05);
-    color: #C7D6E8;
-    border-left: 2px solid rgba(56,225,255,0.3);
-    transform: translateX(3px);
-    box-shadow: none;
+    color: #FFFFFF !important;
+    transform: translateX(6px);
+    box-shadow: 0 6px 20px rgba(56,225,255,0.35);
 }
 [data-testid="stSidebar"] .stButton>button:hover::before {
-    background-color: #38E1FF;
-    transform: translateY(-50%) scale(1.1);
+    background-color: #FFFFFF;
 }
 
 [data-testid="stSidebar"] .stButton>button[kind="primary"] {
-    background: rgba(56,225,255,0.07);
-    color: #38E1FF;
-    border-left: 2px solid #38E1FF;
-    border-radius: 6px;
-    font-weight: 600;
-    box-shadow: none;
-    animation: navSlideIn 0.3s ease;
-}
-[data-testid="stSidebar"] .stButton>button[kind="primary"]::before {
-    background-color: #38E1FF;
-    filter: drop-shadow(0 0 4px rgba(56,225,255,0.6));
+    box-shadow: 0 0 20px rgba(56,225,255,0.5);
+    font-weight: 700;
 }
 [data-testid="stSidebar"] .stButton>button[kind="primary"]:hover {
     transform: none;
-    background: rgba(56,225,255,0.1);
-}
-@keyframes navSlideIn {
-    from { border-left-width: 0px; background: rgba(56,225,255,0); }
-    to { border-left-width: 2px; background: rgba(56,225,255,0.07); }
 }
 
 .st-key-nav_About-Me button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iOCIgcj0iNCIvPjxwYXRoIGQ9Ik00IDIwYzAtNCAzLjUtNiA4LTZzOCAyIDggNiIvPjwvc3ZnPg=="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iOCIgcj0iNCIvPjxwYXRoIGQ9Ik00IDIwYzAtNCAzLjUtNiA4LTZzOCAyIDggNiIvPjwvc3ZnPg=="); }
@@ -150,27 +141,52 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
 
 .st-key-nav_Runbooks button::before { mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik00IDE5LjVBMi41IDIuNSAwIDAgMSA2LjUgMTdIMjAiLz48cGF0aCBkPSJNNi41IDJIMjB2MjBINi41QTIuNSAyLjUgMCAwIDEgNCAxOS41di0xNUEyLjUgMi41IDAgMCAxIDYuNSAyWiIvPjwvc3ZnPg=="); -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik00IDE5LjVBMi41IDIuNSAwIDAgMSA2LjUgMTdIMjAiLz48cGF0aCBkPSJNNi41IDJIMjB2MjBINi41QTIuNSAyLjUgMCAwIDEgNCAxOS41di0xNUEyLjUgMi41IDAgMCAxIDYuNSAyWiIvPjwvc3ZnPg=="); }
 
-.sidebar-footer {
+.sidebar-footer-simple {
+    padding: 14px 4px;
+    margin-top: 10px;
+    border-top: 1px solid rgba(56,225,255,0.1);
+}
+.footer-name {
+    color: #E6F1FF;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.social-link-row {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px;
-    margin-top: 24px;
-    border-radius: 14px;
-    background: rgba(56,225,255,0.05);
-    border: 1px solid rgba(56,225,255,0.12);
+    gap: 8px;
+    text-decoration: none;
 }
-.sidebar-footer .avatar {
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #1B8FD1, #38E1FF);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; color: #06121F;
+.social-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
 }
-.sidebar-footer .name { color: #E6F1FF; font-weight: 600; font-size: 14px; }
-.sidebar-footer .link { color: #38E1FF; font-size: 12px; text-decoration: none; }
+.social-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: #8A9AB5;
+    transition: fill 0.2s ease;
+}
+.social-link-row:hover .social-icon svg {
+    fill: #38E1FF;
+}
+.social-link-row span:last-child {
+    color: #8A9AB5;
+    font-size: 12px;
+    transition: color 0.2s ease;
+}
+.social-link-row:hover span:last-child {
+    color: #38E1FF;
+}
 
-.hero { animation: fadeInUp 0.7s ease both; padding: 40px 0 20px 0; }
+.hero { animation: fadeInUp 0.7s ease both; padding: 8px 0 20px 0; }
 .hero h1 {
     font-size: 42px;
     background: linear-gradient(90deg, #E6F1FF, #38E1FF);
@@ -339,6 +355,51 @@ html, body, [class*="css"] { font-family: 'Space Grotesk', sans-serif; }
 
 #chat-drag-handle:active {
     cursor: grabbing;
+}
+
+.sidebar-footer {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    margin-top: 24px;
+    border-radius: 14px;
+    background: rgba(56,225,255,0.05);
+    border: 1px solid rgba(56,225,255,0.12);
+}
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 6px;
+}
+.social-link-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+.social-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+.social-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: #38E1FF;
+}
+.social-link-row span {
+    color: #38E1FF;
+    font-size: 12px;
+}
+
+[data-testid="stSidebar"] [data-testid="stVerticalBlock"] > [data-testid="stElementContainer"] {
+    margin-bottom: 0px !important;
+}
+
+.block-container {
+    padding-top: 2rem !important;
 }
 
 </style>
@@ -602,7 +663,24 @@ nav_groups = [
     ]),
 ]
 
-st.sidebar.markdown("<div class='sidebar-logo'>☁️ <span>CloudGenie</span></div>", unsafe_allow_html=True)
+st.sidebar.markdown("""
+<div class="sidebar-logo">
+    <svg width="34" height="34" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38E1FF"/>
+                <stop offset="100%" stop-color="#1B8FD1"/>
+            </linearGradient>
+        </defs>
+        <circle cx="16" cy="8" r="5" fill="url(#logoGrad)"/>
+        <circle cx="8" cy="20" r="5" fill="url(#logoGrad)" opacity="0.7"/>
+        <circle cx="24" cy="20" r="5" fill="url(#logoGrad)" opacity="0.7"/>
+        <line x1="16" y1="8" x2="8" y2="20" stroke="#38E1FF" stroke-width="1.5" opacity="0.4"/>
+        <line x1="16" y1="8" x2="24" y2="20" stroke="#38E1FF" stroke-width="1.5" opacity="0.4"/>
+    </svg>
+    <span>CloudGenie</span>
+</div>
+""", unsafe_allow_html=True)
 
 for section_label, items in nav_groups:
     if section_label:
@@ -616,12 +694,17 @@ for section_label, items in nav_groups:
                 st.session_state.page = label
 
 st.sidebar.markdown("""
-<div class="sidebar-footer">
-    <div class="avatar">CD</div>
-    <div>
-        <div class="name">Carlito Dignos</div>
-        <a class="link" href="https://github.com/CarlCode-dev" target="_blank">github.com/CarlCode-dev</a><br>
-        <a class="link" href="https://www.linkedin.com/in/carlito-dignos-b270a5439/" target="_blank">LinkedIn</a>
+<div class="sidebar-footer-simple">
+    <div class="footer-name">Carlito Dignos</div>
+    <div class="social-links">
+        <a class="social-link-row" href="https://github.com/CarlCode-dev" target="_blank">
+            <span class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.15 0 1.55-.01 2.8-.01 3.18 0 .31.2.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg></span>
+            <span>GitHub</span>
+        </a>
+        <a class="social-link-row" href="https://www.linkedin.com/in/carlito-dignos-b270a5439/" target="_blank">
+            <span class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z"/></svg></span>
+            <span>LinkedIn</span>
+        </a>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -750,7 +833,7 @@ if page == "About Me":
     st.markdown("""
     <div class="hero">
         <h1>Hi, I'm Carl 👋</h1>
-        <p>3rd-year BSIT student building toward a Cloud Engineer/Architecture career. CloudGenie is my hands-on portfolio project — a working cloud operations platform with real AI integration, combining security auditing, cost optimization, live monitoring, incident response, and an AI assistant into one deployed app.</p>
+        <p>3rd-year BSIT student building toward a Cloud Engineering career. CloudGenie is my hands-on portfolio project — a working cloud operations platform with real AI integration, deployed both on Streamlit Community Cloud and on real AWS infrastructure (EC2, VPC) provisioned with Terraform.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -777,9 +860,9 @@ if page == "About Me":
     st.caption("💬 Also available on every page: **Ask CloudGenie**, a floating AI assistant for cloud and DevOps questions.")
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("Built end-to-end: coded in Python, integrated with Google's Gemini API for real AI analysis, version-controlled with Git/GitHub, and deployed live on Streamlit Community Cloud — a full working deployment pipeline, not just a design mockup.")
+    st.markdown("Built end-to-end: coded in Python, integrated with Google's Gemini API for real AI analysis, version-controlled with Git/GitHub, and deployed on both Streamlit Community Cloud and real AWS infrastructure (EC2, VPC, Security Groups) provisioned with Terraform — a full working deployment pipeline, not just a design mockup.")
 
-    st.info("All AI-powered features (SecOps, FinOps, Ask CloudGenie, Runbooks) use real, live Gemini API responses. Some supporting data within CloudGenie itself — like the 6-month billing history and live system metrics — is simulated by design. The Live Deployments page, however, links to genuinely real, separately-hosted cloud infrastructure projects.")
+    st.info("All AI-powered features (SecOps, FinOps, Ask CloudGenie, Runbooks) use real, live Gemini API responses. Some supporting data within CloudGenie itself — like the 6-month billing history and live system metrics — is simulated by design. The Live Deployments page links to a genuinely separate, real AWS deployment of this same app, provisioned entirely through Infrastructure-as-Code.")
 
 # --- Dashboard ---
 elif page == "Dashboard":
